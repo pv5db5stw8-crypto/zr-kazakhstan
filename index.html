@@ -8,19 +8,21 @@
     <meta name="apple-mobile-web-app-title" content="ZR Kazakhstan">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
     <title>ZR Kazakhstan — Гарантия</title>
-    <!-- QR-библиотека (исправленная ссылка) -->
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- QR-библиотеки -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <!-- QR-сканер -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
     <style>
-        /* ===== ОСНОВНЫЕ ПЕРЕМЕННЫЕ ===== */
+        /* ===== ВСЕ СТИЛИ (те же, что и были) ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-
         body {
             background: #f5f0eb;
             color: #2d2a24;
@@ -28,7 +30,6 @@
             padding: 16px;
             transition: background 0.3s, color 0.3s;
         }
-
         @media (prefers-color-scheme: dark) {
             body {
                 background: #0a0a12;
@@ -89,13 +90,10 @@
                 background: #16161f !important;
             }
         }
-
         .container {
             max-width: 500px;
             margin: 0 auto;
         }
-
-        /* ===== ЛОГОТИП ===== */
         .logo {
             text-align: center;
             margin-bottom: 24px;
@@ -121,8 +119,6 @@
             color: #8888aa;
             letter-spacing: 2px;
         }
-
-        /* ===== КАРТОЧКИ ===== */
         .card {
             background: #ffffff;
             border-radius: 20px;
@@ -137,8 +133,6 @@
             margin-bottom: 16px;
             text-align: center;
         }
-
-        /* ===== ПОЛЯ ВВОДА ===== */
         .input {
             width: 100%;
             padding: 14px 16px;
@@ -156,9 +150,6 @@
         }
         .input::placeholder {
             color: #bbb;
-        }
-        .input-phone {
-            padding-left: 48px;
         }
         .phone-wrapper {
             position: relative;
@@ -178,8 +169,9 @@
                 color: #e8e4de;
             }
         }
-
-        /* ===== КНОПКИ ===== */
+        .input-phone {
+            padding-left: 48px;
+        }
         .btn {
             width: 100%;
             padding: 16px;
@@ -233,8 +225,6 @@
         .btn-whatsapp:hover {
             background: #1da851;
         }
-
-        /* ===== ОШИБКИ ===== */
         .error {
             background: rgba(231, 76, 60, 0.1);
             color: #e74c3c;
@@ -256,8 +246,6 @@
         .hidden {
             display: none !important;
         }
-
-        /* ===== ЗАПИСИ ===== */
         .record {
             background: #fff;
             border-radius: 12px;
@@ -292,8 +280,6 @@
         .status-expired {
             color: #e74c3c;
         }
-
-        /* ===== ШАПКА ===== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -332,8 +318,6 @@
         .logout-btn:hover {
             transform: scale(1.05);
         }
-
-        /* ===== ПРОФИЛЬ ===== */
         .profile-header {
             display: flex;
             align-items: center;
@@ -377,8 +361,6 @@
             font-size: 11px;
             color: #8888aa;
         }
-
-        /* ===== ВКЛАДКИ ===== */
         .tabs {
             display: flex;
             gap: 8px;
@@ -408,8 +390,6 @@
         .tab-content.active {
             display: block;
         }
-
-        /* ===== ПЕРЕКЛЮЧЕНИЕ АВТОРИЗАЦИИ ===== */
         .switch-link {
             text-align: center;
             margin-top: 16px;
@@ -420,8 +400,6 @@
         .switch-link:hover {
             text-decoration: underline;
         }
-
-        /* ===== QR-МОДАЛКА ===== */
         .qr-modal {
             position: fixed;
             top: 0;
@@ -447,14 +425,6 @@
             text-align: center;
             animation: fadeIn 0.3s ease-out;
         }
-        .qr-modal-content h3 {
-            margin-bottom: 8px;
-        }
-        .qr-modal-content p {
-            color: #8888aa;
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
         .qr-modal-content .qr-code {
             display: flex;
             justify-content: center;
@@ -477,8 +447,6 @@
             flex: 1;
             margin-bottom: 0;
         }
-
-        /* ===== АДМИН-СПИСКИ ===== */
         .user-item {
             display: flex;
             justify-content: space-between;
@@ -511,8 +479,6 @@
         .user-item .user-status.blocked {
             background: #e74c3c;
         }
-
-        /* ===== СТАТИСТИКА ===== */
         .stats {
             display: flex;
             justify-content: space-around;
@@ -534,8 +500,6 @@
             font-size: 11px;
             color: #8888aa;
         }
-
-        /* ===== QR-СКАНЕР ===== */
         #scannerModal {
             position: fixed;
             top: 0;
@@ -585,8 +549,6 @@
             opacity: 0.6;
             font-size: 14px;
         }
-
-        /* ===== УТИЛИТЫ ===== */
         .flex {
             display: flex;
             align-items: center;
@@ -604,10 +566,6 @@
             font-size: 20px;
             cursor: pointer;
         }
-        .text-muted {
-            color: #8888aa;
-            font-size: 13px;
-        }
         .forgot-link {
             text-align: right;
             margin-top: -8px;
@@ -623,8 +581,6 @@
             color: #c9a84c;
             text-decoration: underline;
         }
-
-        /* ===== АНИМАЦИИ ===== */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -638,7 +594,6 @@
         .fade-in {
             animation: fadeIn 0.3s ease-out;
         }
-
         @media (max-width: 480px) {
             body {
                 padding: 12px;
@@ -734,7 +689,6 @@
                     </div>
                     <button class="btn" id="addRecordBtn">➕ Добавить плёнку</button>
                 </div>
-
                 <div style="font-weight:600; margin: 16px 0 10px;">📜 Мои плёнки (<span id="userCount">0</span>)</div>
                 <div id="userRecords"></div>
             </div>
@@ -751,25 +705,14 @@
                         <button class="btn btn-sm btn-secondary" id="changeAvatarBtn">🖼️ Изменить</button>
                     </div>
                     <div class="profile-stats">
-                        <div class="profile-stat">
-                            <div class="profile-stat-number" id="profileFilmsCount">0</div>
-                            <div class="profile-stat-label">Плёнок</div>
-                        </div>
-                        <div class="profile-stat">
-                            <div class="profile-stat-number" id="profileActiveWarranty">0</div>
-                            <div class="profile-stat-label">Активных</div>
-                        </div>
-                        <div class="profile-stat">
-                            <div class="profile-stat-number" id="profileExpiredWarranty">0</div>
-                            <div class="profile-stat-label">Просрочено</div>
-                        </div>
+                        <div class="profile-stat"><div class="profile-stat-number" id="profileFilmsCount">0</div><div class="profile-stat-label">Плёнок</div></div>
+                        <div class="profile-stat"><div class="profile-stat-number" id="profileActiveWarranty">0</div><div class="profile-stat-label">Активных</div></div>
+                        <div class="profile-stat"><div class="profile-stat-number" id="profileExpiredWarranty">0</div><div class="profile-stat-label">Просрочено</div></div>
                     </div>
                 </div>
                 <div class="card">
                     <div style="font-weight:600; margin-bottom:8px;">📊 Моя статистика</div>
-                    <div id="profileActivityLog" style="font-size:13px; color:#8888aa; max-height:150px; overflow-y:auto;">
-                        Нет активности
-                    </div>
+                    <div id="profileActivityLog" style="font-size:13px; color:#8888aa; max-height:150px; overflow-y:auto;">Нет активности</div>
                 </div>
             </div>
         </div>
@@ -793,22 +736,10 @@
 
             <div id="adminDashboard" class="tab-content active">
                 <div class="stats" id="adminStats">
-                    <div class="stats-item">
-                        <div class="stats-number" id="statUsers">0</div>
-                        <div class="stats-label">👥 пользователей</div>
-                    </div>
-                    <div class="stats-item">
-                        <div class="stats-number" id="statFilms">0</div>
-                        <div class="stats-label">🎞️ регистраций</div>
-                    </div>
-                    <div class="stats-item">
-                        <div class="stats-number" id="statCatalog">0</div>
-                        <div class="stats-label">📦 рулонов</div>
-                    </div>
-                    <div class="stats-item">
-                        <div class="stats-number" id="statBlocked">0</div>
-                        <div class="stats-label">🚫 заблокировано</div>
-                    </div>
+                    <div class="stats-item"><div class="stats-number" id="statUsers">0</div><div class="stats-label">👥 пользователей</div></div>
+                    <div class="stats-item"><div class="stats-number" id="statFilms">0</div><div class="stats-label">🎞️ регистраций</div></div>
+                    <div class="stats-item"><div class="stats-number" id="statCatalog">0</div><div class="stats-label">📦 рулонов</div></div>
+                    <div class="stats-item"><div class="stats-number" id="statBlocked">0</div><div class="stats-label">🚫 заблокировано</div></div>
                 </div>
                 <div class="card">
                     <div style="font-weight:600; margin-bottom:8px;">📈 Активность сегодня</div>
@@ -819,7 +750,7 @@
 
             <div id="adminUsers" class="tab-content">
                 <div class="card">
-                    <div style="font-weight:600; margin-bottom:12px;">👥 Управление пользователями (админ видит пароли)</div>
+                    <div style="font-weight:600; margin-bottom:12px;">👥 Управление пользователями</div>
                     <div id="adminUserList"></div>
                 </div>
             </div>
@@ -882,7 +813,14 @@
 
     <script>
         // ============================================
-        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ (ИСПРАВЛЕННЫЙ)
+        // === ВАША FIREBASE КОНФИГУРАЦИЯ ===
+        // ============================================
+        const supabaseUrl = 'https://rbejdwshewypcnqidhdu.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiZWpkd3NoZXd5cGNucWlkaGR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU3ODI4NTcsImV4cCI6MjEwMTM1ODg1N30.KpxxcTJYW8CRmi78XMhxYU-WGGc5J80DBTrUbWUmwps';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // ============================================
+        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ
         // ============================================
 
         // ----- Состояние -----
@@ -890,7 +828,7 @@
             isLoggedIn: false,
             isAdmin: false,
             currentUser: '',
-            users: {}, // { login: { password, phone } }
+            users: {},
             films: [],
             catalog: [],
             blockedUsers: [],
@@ -978,76 +916,6 @@
         const downloadQrBtn = $('downloadQrBtn');
         const closeQrBtn = $('closeQrBtn');
 
-        // ----- Инициализация данных -----
-        function loadData() {
-            try {
-                const savedUsers = localStorage.getItem('zr_users');
-                if (savedUsers) state.users = JSON.parse(savedUsers);
-
-                const savedFilms = localStorage.getItem('zr_films');
-                if (savedFilms) state.films = JSON.parse(savedFilms);
-
-                const savedCatalog = localStorage.getItem('zr_catalog');
-                if (savedCatalog) state.catalog = JSON.parse(savedCatalog);
-
-                const savedBlocked = localStorage.getItem('zr_blocked');
-                if (savedBlocked) state.blockedUsers = JSON.parse(savedBlocked);
-
-                const savedLogs = localStorage.getItem('zr_logs');
-                if (savedLogs) state.logs = JSON.parse(savedLogs);
-
-                const savedAvatars = localStorage.getItem('zr_avatars');
-                if (savedAvatars) state.userAvatars = JSON.parse(savedAvatars);
-
-                const savedSession = localStorage.getItem('zr_session');
-                if (savedSession) {
-                    const session = JSON.parse(savedSession);
-                    state.isLoggedIn = true;
-                    state.isAdmin = session.isAdmin || false;
-                    state.currentUser = session.username || '';
-                    if (state.isAdmin) showAdminScreen();
-                    else showUserScreen();
-                }
-            } catch (e) {
-                console.log('Ошибка загрузки', e);
-            }
-        }
-
-        function saveData() {
-            try {
-                localStorage.setItem('zr_users', JSON.stringify(state.users));
-                localStorage.setItem('zr_films', JSON.stringify(state.films));
-                localStorage.setItem('zr_catalog', JSON.stringify(state.catalog));
-                localStorage.setItem('zr_blocked', JSON.stringify(state.blockedUsers));
-                localStorage.setItem('zr_logs', JSON.stringify(state.logs));
-                localStorage.setItem('zr_avatars', JSON.stringify(state.userAvatars));
-            } catch (e) {
-                console.log('Ошибка сохранения', e);
-            }
-        }
-
-        function saveSession() {
-            if (state.isLoggedIn) {
-                localStorage.setItem('zr_session', JSON.stringify({
-                    username: state.currentUser,
-                    isAdmin: state.isAdmin
-                }));
-            } else {
-                localStorage.removeItem('zr_session');
-            }
-        }
-
-        function addLog(action) {
-            const log = {
-                time: new Date().toLocaleString('ru-RU'),
-                user: state.currentUser || 'system',
-                action: action
-            };
-            state.logs = [log, ...state.logs];
-            if (state.logs.length > 100) state.logs = state.logs.slice(0, 100);
-            saveData();
-        }
-
         // ----- Валидация -----
         function validateLogin(login) {
             if (login.length < 6) return { valid: false, msg: 'Логин должен быть минимум 6 символов' };
@@ -1064,10 +932,229 @@
         }
 
         function validatePhone(phone) {
-            // Ожидаем только цифры после +7
             if (phone.length < 10) return { valid: false, msg: 'Введите 10 цифр после +7' };
             if (!/^[0-9]+$/.test(phone)) return { valid: false, msg: 'Только цифры' };
             return { valid: true };
+        }
+
+        // ----- Функции Supabase -----
+        async function registerUser(login, password, phone) {
+            try {
+                const { error } = await supabase
+                    .from('users')
+                    .insert([{
+                        login: login,
+                        password: password,
+                        phone: phone,
+                        blocked: false
+                    }]);
+                if (error) {
+                    if (error.code === '23505') {
+                        showError(authError, '❌ Пользователь с таким логином уже существует');
+                    } else {
+                        showError(authError, '❌ Ошибка: ' + error.message);
+                    }
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                showError(authError, '❌ Ошибка: ' + e.message);
+                return false;
+            }
+        }
+
+        async function loginUser(login, password) {
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('login', login)
+                    .maybeSingle();
+
+                if (error || !data) {
+                    showError(authError, '❌ Пользователь не найден');
+                    return false;
+                }
+
+                if (data.blocked) {
+                    showError(authError, '🚫 Аккаунт заблокирован');
+                    return false;
+                }
+
+                if (data.password !== password) {
+                    showError(authError, '❌ Неверный пароль');
+                    return false;
+                }
+
+                return data;
+            } catch (e) {
+                showError(authError, '❌ Ошибка: ' + e.message);
+                return false;
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*');
+                if (error) return {};
+                const users = {};
+                data.forEach(u => {
+                    users[u.login] = {
+                        password: u.password,
+                        phone: u.phone,
+                        blocked: u.blocked || false
+                    };
+                });
+                return users;
+            } catch (e) {
+                console.error(e);
+                return {};
+            }
+        }
+
+        async function loadUserFilms(username) {
+            try {
+                const { data, error } = await supabase
+                    .from('films')
+                    .select('*')
+                    .eq('username', username);
+                if (error) return [];
+                return data;
+            } catch (e) {
+                console.error(e);
+                return [];
+            }
+        }
+
+        async function addFilm(roll, warranty, user, endDate) {
+            try {
+                const { error } = await supabase
+                    .from('films')
+                    .insert([{
+                        id: Date.now().toString(),
+                        roll: roll,
+                        warranty: warranty,
+                        date: new Date().toLocaleString('ru-RU'),
+                        username: user,
+                        endDate: endDate
+                    }]);
+                if (error) {
+                    alert('❌ Ошибка: ' + error.message);
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                alert('❌ Ошибка: ' + e.message);
+                return false;
+            }
+        }
+
+        async function loadCatalog() {
+            try {
+                const { data, error } = await supabase
+                    .from('catalog')
+                    .select('*');
+                if (error) return [];
+                return data;
+            } catch (e) {
+                console.error(e);
+                return [];
+            }
+        }
+
+        async function addCatalogItem(roll, name, endDate) {
+            try {
+                const { error } = await supabase
+                    .from('catalog')
+                    .insert([{ roll, name, endDate }]);
+                if (error) {
+                    alert('❌ Ошибка: ' + error.message);
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                alert('❌ Ошибка: ' + e.message);
+                return false;
+            }
+        }
+
+        async function deleteCatalogItem(roll) {
+            try {
+                const { error } = await supabase
+                    .from('catalog')
+                    .delete()
+                    .eq('roll', roll);
+                if (error) {
+                    alert('❌ Ошибка: ' + error.message);
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                alert('❌ Ошибка: ' + e.message);
+                return false;
+            }
+        }
+
+        async function toggleBlockUser(username) {
+            if (username === 'admin') {
+                alert('❌ Администратора нельзя заблокировать');
+                return;
+            }
+            try {
+                const current = state.users[username];
+                if (!current) return;
+                const newBlocked = !current.blocked;
+                const { error } = await supabase
+                    .from('users')
+                    .update({ blocked: newBlocked })
+                    .eq('login', username);
+                if (error) {
+                    alert('❌ Ошибка: ' + error.message);
+                    return;
+                }
+                state.users[username].blocked = newBlocked;
+                if (newBlocked) {
+                    state.blockedUsers.push(username);
+                    addLog('Заблокировал: ' + username);
+                } else {
+                    state.blockedUsers = state.blockedUsers.filter(u => u !== username);
+                    addLog('Разблокировал: ' + username);
+                }
+                renderAdminPanel();
+            } catch (e) {
+                alert('❌ Ошибка: ' + e.message);
+            }
+        }
+
+        async function addLog(action) {
+            try {
+                await supabase
+                    .from('logs')
+                    .insert([{
+                        action: action,
+                        username: state.currentUser || 'system',
+                        time: new Date().toLocaleString('ru-RU')
+                    }]);
+            } catch (e) {
+                console.error('Ошибка логирования:', e);
+            }
+        }
+
+        async function loadLogs() {
+            try {
+                const { data, error } = await supabase
+                    .from('logs')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(100);
+                if (error) return [];
+                return data;
+            } catch (e) {
+                console.error(e);
+                return [];
+            }
         }
 
         // ----- Показать экраны -----
@@ -1129,17 +1216,13 @@
                     showError(authError, '❌ Пароли не совпадают');
                     return;
                 }
-                if (state.users[login]) {
-                    showError(authError, '❌ Пользователь уже существует');
-                    return;
-                }
-                // Сохраняем телефон без +7 (только цифры)
-                state.users[login] = { password: password, phone: phone };
-                state.userAvatars[login] = null;
-                saveData();
-                addLog('Зарегистрировался: ' + login + ' (тел: +7' + phone + ')');
-                showSuccess(authSuccess, '✅ Регистрация прошла успешно! Теперь войдите.');
-                toggleAuthMode();
+
+                registerUser(login, password, phone).then(success => {
+                    if (success) {
+                        showSuccess(authSuccess, '✅ Регистрация прошла успешно! Теперь войдите.');
+                        toggleAuthMode();
+                    }
+                });
                 return;
             }
 
@@ -1148,32 +1231,24 @@
                 state.isLoggedIn = true;
                 state.isAdmin = true;
                 state.currentUser = 'admin';
-                saveSession();
                 addLog('Вход в админ-панель');
                 showAdminScreen();
                 return;
             }
 
-            if (state.users[login]) {
-                if (state.blockedUsers.includes(login)) {
-                    showError(authError, '🚫 Аккаунт заблокирован. Обратитесь к администратору.');
-                    return;
-                }
-                if (state.users[login].password === password) {
+            loginUser(login, password).then(userData => {
+                if (userData) {
                     state.isLoggedIn = true;
                     state.isAdmin = false;
                     state.currentUser = login;
-                    saveSession();
                     addLog('Вход в систему: ' + login);
-                    showUserScreen();
-                    return;
-                } else {
-                    showError(authError, '❌ Неверный пароль');
-                    return;
+                    // Загружаем данные пользователя
+                    loadUserFilms(login).then(films => {
+                        state.films = films;
+                        showUserScreen();
+                    });
                 }
-            } else {
-                showError(authError, '❌ Пользователь не найден');
-            }
+            });
         }
 
         function toggleAuthMode() {
@@ -1205,30 +1280,28 @@
                 return;
             }
 
-            if (state.users[login]) {
-                addLog('🔔 ЗАПРОС ВОССТАНОВЛЕНИЯ ПАРОЛЯ от: ' + login);
-                state.pendingResetRequests[login] = Date.now();
-                saveData();
-
-                const phone = state.users[login].phone;
-                if (phone) {
-                    const waUrl = 'https://wa.me/7' + phone + '?text=' + encodeURIComponent(
-                        '🔑 Запрос на восстановление пароля\n' +
-                        'Логин: ' + login + '\n' +
-                        'Ваш пароль: ' + state.users[login].password + '\n' +
-                        'С уважением, ZR Kazakhstan'
-                    );
-                    window.open(waUrl, '_blank');
+            loadUsers().then(users => {
+                if (users[login]) {
+                    addLog('🔔 ЗАПРОС ВОССТАНОВЛЕНИЯ ПАРОЛЯ от: ' + login);
+                    const phone = users[login].phone;
+                    if (phone) {
+                        const waUrl = 'https://wa.me/7' + phone + '?text=' + encodeURIComponent(
+                            '🔑 Запрос на восстановление пароля\n' +
+                            'Логин: ' + login + '\n' +
+                            'Ваш пароль: ' + users[login].password + '\n' +
+                            'С уважением, ZR Kazakhstan'
+                        );
+                        window.open(waUrl, '_blank');
+                    }
+                    alert('✅ Запрос отправлен администратору!\nАдминистратор свяжется с вами по WhatsApp.');
+                    forgotModal.style.display = 'none';
+                } else {
+                    showError(forgotError, '❌ Пользователь с таким логином не найден');
                 }
-
-                alert('✅ Запрос отправлен администратору!\nАдминистратор свяжется с вами по WhatsApp.');
-                forgotModal.style.display = 'none';
-            } else {
-                showError(forgotError, '❌ Пользователь с таким логином не найден');
-            }
+            });
         }
 
-        // ----- QR-ГЕНЕРАТОР (ИСПРАВЛЕННЫЙ) -----
+        // ----- QR-ГЕНЕРАТОР -----
         function showQrModal(roll) {
             const catalogItem = state.catalog.find(c => c.roll === roll);
             if (!catalogItem) {
@@ -1238,12 +1311,11 @@
 
             qrModalTitle.textContent = '📱 QR-код: ' + roll;
             qrModalSub.textContent = 'Модель: ' + catalogItem.name + ' | До: ' + new Date(catalogItem.endDate)
-            .toLocaleDateString('ru-RU');
+                .toLocaleDateString('ru-RU');
             qrRollNumber.textContent = roll;
 
             qrCodeContainer.innerHTML = '';
             try {
-                // Проверяем, что QRCode определён
                 if (typeof QRCode !== 'undefined') {
                     state.qrInstance = new QRCode(qrCodeContainer, {
                         text: roll,
@@ -1254,13 +1326,10 @@
                         correctLevel: QRCode.CorrectLevel.H
                     });
                 } else {
-                    // Если библиотека не загрузилась — показываем текст
                     qrCodeContainer.innerHTML = '<div style="padding:20px; border:2px dashed #c9a84c; border-radius:12px; font-size:16px; color:#8888aa;">QR-код: ' + roll + '</div>';
-                    console.warn('QRCode библиотека не загружена');
                 }
             } catch (e) {
                 qrCodeContainer.innerHTML = '<div style="padding:20px; border:2px dashed #c9a84c; border-radius:12px; font-size:16px; color:#8888aa;">QR-код: ' + roll + '</div>';
-                console.error('Ошибка генерации QR:', e);
             }
 
             qrModal.classList.add('active');
@@ -1378,31 +1447,33 @@
                 return;
             }
 
-            const newRecord = {
-                id: Date.now().toString(),
-                roll: roll,
-                warranty: warranty,
-                date: new Date().toLocaleString('ru-RU'),
-                user: state.currentUser,
-                endDate: catalogItem.endDate,
-            };
+            addFilm(roll, warranty, state.currentUser, catalogItem.endDate).then(success => {
+                if (success) {
+                    const newRecord = {
+                        id: Date.now().toString(),
+                        roll: roll,
+                        warranty: warranty,
+                        date: new Date().toLocaleString('ru-RU'),
+                        username: state.currentUser,
+                        endDate: catalogItem.endDate,
+                    };
+                    state.films = [newRecord, ...state.films];
+                    rollInput.value = '';
+                    warrantyInput.value = '';
+                    renderUserRecords();
+                    updateProfile();
+                    addLog('Добавил плёнку: ' + roll);
 
-            state.films = [newRecord, ...state.films];
-            saveData();
-            addLog('Добавил плёнку: ' + roll);
-            rollInput.value = '';
-            warrantyInput.value = '';
-            renderUserRecords();
-            updateProfile();
-
-            const info = getWarrantyInfo(roll);
-            if (info && info.daysLeft > 0) {
-                alert('✅ Готово!\nГарантия действует ещё ' + info.daysLeft + ' дней.');
-            } else if (info && info.daysLeft <= 0) {
-                alert('⚠️ Внимание!\nГарантия на этот рулон истекла.');
-            } else {
-                alert('✅ Готово! Плёнка добавлена в архив.');
-            }
+                    const info = getWarrantyInfo(roll);
+                    if (info && info.daysLeft > 0) {
+                        alert('✅ Готово!\nГарантия действует ещё ' + info.daysLeft + ' дней.');
+                    } else if (info && info.daysLeft <= 0) {
+                        alert('⚠️ Внимание!\nГарантия на этот рулон истекла.');
+                    } else {
+                        alert('✅ Готово! Плёнка добавлена в архив.');
+                    }
+                }
+            });
         }
 
         function getWarrantyInfo(roll) {
@@ -1431,7 +1502,7 @@
         }
 
         function renderUserRecords() {
-            const userFilms = state.films.filter(f => f.user === state.currentUser);
+            const userFilms = state.films.filter(f => f.username === state.currentUser);
             userCount.textContent = userFilms.length;
 
             if (userFilms.length === 0) {
@@ -1456,14 +1527,13 @@
 
         // ----- Профиль -----
         function updateProfile() {
-            const userFilms = state.films.filter(f => f.user === state.currentUser);
+            const userFilms = state.films.filter(f => f.username === state.currentUser);
             profileName.textContent = state.currentUser;
             profileLogin.textContent = '@' + state.currentUser;
 
             const userData = state.users[state.currentUser];
             if (userData && userData.phone) {
                 const phone = userData.phone;
-                // Форматируем: +7 700 123 45 67
                 const formatted = '+7 ' + phone.slice(0, 3) + ' ' + phone.slice(3, 6) + ' ' + phone.slice(6, 8) + ' ' + phone
                     .slice(8, 10);
                 profilePhone.textContent = '📱 ' + formatted;
@@ -1495,7 +1565,6 @@
                 const reader = new FileReader();
                 reader.onload = function(ev) {
                     state.userAvatars[state.currentUser] = ev.target.result;
-                    saveData();
                     profileAvatar.src = ev.target.result;
                     addLog('Обновил аватар');
                 };
@@ -1504,42 +1573,51 @@
             input.click();
         }
 
-        // ----- Админ (исправленный рендеринг) -----
-        function renderAdminPanel() {
-            const userList = Object.keys(state.users);
-            const blockedCount = state.blockedUsers.length;
+        // ----- Админ -----
+        async function renderAdminPanel() {
+            // Загружаем свежие данные из Supabase
+            const users = await loadUsers();
+            state.users = users;
+            
+            const catalog = await loadCatalog();
+            state.catalog = catalog;
+            
+            const logs = await loadLogs();
+            state.logs = logs;
+
+            const userList = Object.keys(users);
+            const blockedCount = userList.filter(u => users[u].blocked).length;
             statUsers.textContent = userList.length;
             statFilms.textContent = state.films.length;
-            statCatalog.textContent = state.catalog.length;
+            statCatalog.textContent = catalog.length;
             statBlocked.textContent = blockedCount;
 
             const today = new Date().toLocaleDateString('ru-RU');
-            const todayLogs = state.logs.filter(l => l.time.includes(today));
+            const todayLogs = logs.filter(l => l.time && l.time.includes(today));
             adminActivitySummary.innerHTML = `
                 <div>📊 Сегодня: ${todayLogs.length} действий</div>
                 <div>👥 Пользователей: ${userList.length}</div>
-                <div>📦 Рулонов: ${state.catalog.length}</div>
-                <div style="margin-top:8px; font-size:12px;">Последние действия: ${state.logs.slice(0,3).map(l => l.action).join(', ')}</div>
+                <div>📦 Рулонов: ${catalog.length}</div>
+                <div style="margin-top:8px; font-size:12px;">Последние действия: ${logs.slice(0,3).map(l => l.action).join(', ')}</div>
             `;
 
-            renderUserList();
-            renderCatalog();
-            renderLogs();
+            renderUserList(users);
+            renderCatalog(catalog);
+            renderLogs(logs);
         }
 
-        function renderUserList() {
-            const userList = Object.keys(state.users);
+        function renderUserList(users) {
+            const userList = Object.keys(users);
             if (userList.length === 0) {
                 adminUserList.innerHTML = '<div style="color:#8888aa; text-align:center; padding:20px;">Нет пользователей</div>';
                 return;
             }
 
             adminUserList.innerHTML = userList.map(u => {
-                const isBlocked = state.blockedUsers.includes(u);
-                const filmsCount = state.films.filter(f => f.user === u).length;
-                const userData = state.users[u];
-                const phone = userData ? '+7 ' + userData.phone : '—';
-                const password = userData ? userData.password : '—';
+                const isBlocked = users[u].blocked || false;
+                const filmsCount = state.films.filter(f => f.username === u).length;
+                const phone = users[u].phone ? '+7 ' + users[u].phone : '—';
+                const password = users[u].password || '—';
 
                 return `
                     <div class="user-item">
@@ -1578,26 +1656,9 @@
             addLog('Отправил WhatsApp пользователю: ' + login);
         }
 
-        function toggleBlockUser(username) {
-            if (username === 'admin') {
-                alert('❌ Администратора нельзя заблокировать');
-                return;
-            }
-            const index = state.blockedUsers.indexOf(username);
-            if (index > -1) {
-                state.blockedUsers.splice(index, 1);
-                addLog('Разблокировал: ' + username);
-            } else {
-                state.blockedUsers.push(username);
-                addLog('Заблокировал: ' + username);
-            }
-            saveData();
-            renderAdminPanel();
-        }
-
-        function renderCatalog() {
+        function renderCatalog(catalog) {
             const search = (adminCatalogSearch?.value || '').toLowerCase();
-            const filtered = state.catalog.filter(c => c.roll.toLowerCase().includes(search) || c.name.toLowerCase().includes(
+            const filtered = catalog.filter(c => c.roll.toLowerCase().includes(search) || c.name.toLowerCase().includes(
             search));
             catalogCount.textContent = filtered.length;
 
@@ -1621,16 +1682,18 @@
             `).join('');
         }
 
-        function deleteCatalogItem(roll) {
+        async function deleteCatalogItem(roll) {
             if (confirm('Удалить рулон ' + roll + '?')) {
-                state.catalog = state.catalog.filter(c => c.roll !== roll);
-                saveData();
-                addLog('Удалил рулон: ' + roll);
-                renderAdminPanel();
+                const success = await deleteCatalogItem(roll);
+                if (success) {
+                    state.catalog = state.catalog.filter(c => c.roll !== roll);
+                    addLog('Удалил рулон: ' + roll);
+                    renderAdminPanel();
+                }
             }
         }
 
-        function handleAddCatalogItem() {
+        async function handleAddCatalogItem() {
             const roll = adminNewRoll.value.trim();
             const name = adminNewName.value.trim();
             const endDate = adminNewEndDate.value.trim();
@@ -1645,25 +1708,27 @@
                 return;
             }
 
-            state.catalog.push({ roll, name, endDate });
-            saveData();
-            addLog('Добавил рулон: ' + roll);
-            adminNewRoll.value = '';
-            adminNewName.value = '';
-            adminNewEndDate.value = '';
-            renderAdminPanel();
-            alert('✅ Рулон добавлен в справочник');
+            const success = await addCatalogItem(roll, name, endDate);
+            if (success) {
+                state.catalog.push({ roll, name, endDate });
+                addLog('Добавил рулон: ' + roll);
+                adminNewRoll.value = '';
+                adminNewName.value = '';
+                adminNewEndDate.value = '';
+                renderAdminPanel();
+                alert('✅ Рулон добавлен в справочник');
+            }
         }
 
-        function renderLogs() {
-            if (state.logs.length === 0) {
+        function renderLogs(logs) {
+            if (logs.length === 0) {
                 adminLogsList.innerHTML = '<div style="color:#8888aa; text-align:center; padding:20px;">Нет записей</div>';
                 return;
             }
-            adminLogsList.innerHTML = state.logs.map(l => `
+            adminLogsList.innerHTML = logs.map(l => `
                 <div style="padding:6px 0; border-bottom:1px solid #e8e0d8; display:flex; justify-content:space-between;">
                     <span>${l.action}</span>
-                    <span style="color:#8888aa; font-size:12px;">${l.time} | ${l.user}</span>
+                    <span style="color:#8888aa; font-size:12px;">${l.time || l.created_at} | ${l.username}</span>
                 </div>
             `).join('');
         }
@@ -1671,12 +1736,12 @@
         function exportCSV() {
             let csv = 'Пользователь,Телефон,Пароль,Рулон,Гарантия,Дата,Окончание\n';
             state.films.forEach(f => {
-                const userData = state.users[f.user];
+                const userData = state.users[f.username];
                 const phone = userData ? '+7' + userData.phone : '—';
                 const password = userData ? userData.password : '—';
                 const info = state.catalog.find(c => c.roll === f.roll);
                 csv +=
-                    `${f.user},${phone},${password},${f.roll},${f.warranty},${f.date},${info ? info.endDate : '—'}\n`;
+                    `${f.username},${phone},${password},${f.roll},${f.warranty},${f.date},${info ? info.endDate : '—'}\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
@@ -1693,7 +1758,6 @@
             state.isLoggedIn = false;
             state.isAdmin = false;
             state.currentUser = '';
-            localStorage.removeItem('zr_session');
             showAuthScreen();
             loginInput.value = '';
             passwordInput.value = '';
@@ -1731,8 +1795,6 @@
 
         // ----- Инициализация -----
         function init() {
-            loadData();
-
             // Авторизация
             authBtn.addEventListener('click', handleAuth);
             switchAuthLink.addEventListener('click', toggleAuthMode);
@@ -1758,7 +1820,7 @@
             // Админ
             adminLogoutBtn.addEventListener('click', logout);
             adminAddCatalogBtn.addEventListener('click', handleAddCatalogItem);
-            adminCatalogSearch?.addEventListener('input', renderCatalog);
+            adminCatalogSearch?.addEventListener('input', () => renderCatalog(state.catalog));
             exportCSVBtn.addEventListener('click', exportCSV);
 
             // QR-генератор
@@ -1784,12 +1846,35 @@
             window.closeQrModal = closeQrModal;
             window.sendWhatsApp = sendWhatsApp;
 
-            if (state.isLoggedIn) {
-                if (state.isAdmin) showAdminScreen();
-                else showUserScreen();
-            } else {
-                showAuthScreen();
-            }
+            // Загрузка данных и проверка сессии
+            loadUsers().then(users => {
+                state.users = users;
+                loadCatalog().then(catalog => {
+                    state.catalog = catalog;
+                    // Проверяем сохранённую сессию
+                    const savedSession = localStorage.getItem('zr_session');
+                    if (savedSession) {
+                        try {
+                            const session = JSON.parse(savedSession);
+                            if (session.username && users[session.username]) {
+                                state.isLoggedIn = true;
+                                state.isAdmin = session.isAdmin || false;
+                                state.currentUser = session.username;
+                                if (state.isAdmin) {
+                                    showAdminScreen();
+                                } else {
+                                    loadUserFilms(session.username).then(films => {
+                                        state.films = films;
+                                        showUserScreen();
+                                    });
+                                }
+                                return;
+                            }
+                        } catch (e) {}
+                    }
+                    showAuthScreen();
+                });
+            });
 
             // Проверка загрузки QR-библиотеки
             if (typeof QRCode === 'undefined') {

@@ -8,7 +8,9 @@
     <meta name="apple-mobile-web-app-title" content="ZR Kazakhstan">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
     <title>ZR Kazakhstan — Гарантия</title>
-    <!-- QR-библиотека -->
+    <!-- QR-библиотека (исправленная ссылка) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- QR-сканер -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <style>
         /* ===== ОСНОВНЫЕ ПЕРЕМЕННЫЕ ===== */
@@ -154,6 +156,27 @@
         }
         .input::placeholder {
             color: #bbb;
+        }
+        .input-phone {
+            padding-left: 48px;
+        }
+        .phone-wrapper {
+            position: relative;
+        }
+        .phone-prefix {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d2a24;
+            pointer-events: none;
+        }
+        @media (prefers-color-scheme: dark) {
+            .phone-prefix {
+                color: #e8e4de;
+            }
         }
 
         /* ===== КНОПКИ ===== */
@@ -668,7 +691,10 @@
                 <input class="input" id="passwordInput" placeholder="Пароль (заглавная, цифры, 8+ символов)" type="password" autocomplete="current-password">
                 <div id="confirmPasswordGroup" class="hidden">
                     <input class="input" id="confirmPasswordInput" placeholder="Подтвердите пароль" type="password">
-                    <input class="input" id="phoneInput" placeholder="Номер телефона (например 77001234567)">
+                    <div class="phone-wrapper">
+                        <span class="phone-prefix">+7</span>
+                        <input class="input input-phone" id="phoneInput" placeholder="7001234567" type="tel" maxlength="10">
+                    </div>
                 </div>
                 <div class="forgot-link">
                     <a id="forgotPasswordLink">Забыли пароль? Обратитесь к администратору</a>
@@ -856,7 +882,7 @@
 
     <script>
         // ============================================
-        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ
+        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ (ИСПРАВЛЕННЫЙ)
         // ============================================
 
         // ----- Состояние -----
@@ -874,7 +900,7 @@
             currentTab: 'tabRecords',
             adminTab: 'adminDashboard',
             qrInstance: null,
-            pendingResetRequests: {}, // { login: timestamp }
+            pendingResetRequests: {},
         };
 
         // ----- DOM-элементы -----
@@ -1038,7 +1064,8 @@
         }
 
         function validatePhone(phone) {
-            if (phone.length < 10) return { valid: false, msg: 'Номер должен быть минимум 10 цифр' };
+            // Ожидаем только цифры после +7
+            if (phone.length < 10) return { valid: false, msg: 'Введите 10 цифр после +7' };
             if (!/^[0-9]+$/.test(phone)) return { valid: false, msg: 'Только цифры' };
             return { valid: true };
         }
@@ -1106,10 +1133,11 @@
                     showError(authError, '❌ Пользователь уже существует');
                     return;
                 }
+                // Сохраняем телефон без +7 (только цифры)
                 state.users[login] = { password: password, phone: phone };
                 state.userAvatars[login] = null;
                 saveData();
-                addLog('Зарегистрировался: ' + login + ' (тел: ' + phone + ')');
+                addLog('Зарегистрировался: ' + login + ' (тел: +7' + phone + ')');
                 showSuccess(authSuccess, '✅ Регистрация прошла успешно! Теперь войдите.');
                 toggleAuthMode();
                 return;
@@ -1154,8 +1182,6 @@
             authBtn.textContent = state.isRegister ? 'Зарегистрироваться' : 'Войти';
             switchAuthLink.textContent = state.isRegister ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться';
             confirmPasswordGroup.classList.toggle('hidden');
-            if (!state.isRegister) phoneInput.classList.add('hidden');
-            else phoneInput.classList.remove('hidden');
             authError.classList.add('hidden');
             authSuccess.classList.add('hidden');
             loginInput.value = '';
@@ -1180,12 +1206,10 @@
             }
 
             if (state.users[login]) {
-                // Отправляем запрос админу (в логи)
                 addLog('🔔 ЗАПРОС ВОССТАНОВЛЕНИЯ ПАРОЛЯ от: ' + login);
                 state.pendingResetRequests[login] = Date.now();
                 saveData();
 
-                // Отправляем в WhatsApp (имитация)
                 const phone = state.users[login].phone;
                 if (phone) {
                     const waUrl = 'https://wa.me/7' + phone + '?text=' + encodeURIComponent(
@@ -1204,7 +1228,7 @@
             }
         }
 
-        // ----- QR-ГЕНЕРАТОР -----
+        // ----- QR-ГЕНЕРАТОР (ИСПРАВЛЕННЫЙ) -----
         function showQrModal(roll) {
             const catalogItem = state.catalog.find(c => c.roll === roll);
             if (!catalogItem) {
@@ -1213,22 +1237,30 @@
             }
 
             qrModalTitle.textContent = '📱 QR-код: ' + roll;
-            qrModalSub.textContent = 'Модель: ' + catalogItem.name + ' | До: ' + new Date(catalogItem.endDate).toLocaleDateString(
-            'ru-RU');
+            qrModalSub.textContent = 'Модель: ' + catalogItem.name + ' | До: ' + new Date(catalogItem.endDate)
+            .toLocaleDateString('ru-RU');
             qrRollNumber.textContent = roll;
 
             qrCodeContainer.innerHTML = '';
             try {
-                state.qrInstance = new QRCode(qrCodeContainer, {
-                    text: roll,
-                    width: 200,
-                    height: 200,
-                    colorDark: '#000000',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.H
-                });
+                // Проверяем, что QRCode определён
+                if (typeof QRCode !== 'undefined') {
+                    state.qrInstance = new QRCode(qrCodeContainer, {
+                        text: roll,
+                        width: 200,
+                        height: 200,
+                        colorDark: '#000000',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                } else {
+                    // Если библиотека не загрузилась — показываем текст
+                    qrCodeContainer.innerHTML = '<div style="padding:20px; border:2px dashed #c9a84c; border-radius:12px; font-size:16px; color:#8888aa;">QR-код: ' + roll + '</div>';
+                    console.warn('QRCode библиотека не загружена');
+                }
             } catch (e) {
                 qrCodeContainer.innerHTML = '<div style="padding:20px; border:2px dashed #c9a84c; border-radius:12px; font-size:16px; color:#8888aa;">QR-код: ' + roll + '</div>';
+                console.error('Ошибка генерации QR:', e);
             }
 
             qrModal.classList.add('active');
@@ -1238,7 +1270,9 @@
         function closeQrModal() {
             qrModal.classList.remove('active');
             if (state.qrInstance) {
-                state.qrInstance.clear();
+                try {
+                    state.qrInstance.clear();
+                } catch (e) {}
                 state.qrInstance = null;
             }
             qrCodeContainer.innerHTML = '';
@@ -1257,7 +1291,7 @@
             }
         }
 
-        // ----- QR-СКАНЕР (НОВЫЙ) -----
+        // ----- QR-СКАНЕР -----
         let html5QrCode = null;
 
         async function startScanner() {
@@ -1265,6 +1299,9 @@
             scannerModal.classList.add('active');
 
             try {
+                if (typeof Html5Qrcode === 'undefined') {
+                    throw new Error('Библиотека сканера не загружена');
+                }
                 html5QrCode = new Html5Qrcode("qr-reader");
 
                 const config = {
@@ -1297,7 +1334,7 @@
 
                 scannerResult.textContent = '📷 Камера готова. Наведите на QR-код.';
             } catch (err) {
-                scannerResult.textContent = '❌ Ошибка доступа к камере: ' + err.message;
+                scannerResult.textContent = '❌ Ошибка: ' + err.message;
                 setTimeout(() => {
                     scannerModal.classList.remove('active');
                 }, 3000);
@@ -1426,8 +1463,10 @@
             const userData = state.users[state.currentUser];
             if (userData && userData.phone) {
                 const phone = userData.phone;
-                profilePhone.textContent = '📱 +7 ' + phone.slice(0, 3) + ' ' + phone.slice(3, 6) + ' ' + phone.slice(6, 8) +
-                    ' ' + phone.slice(8, 10);
+                // Форматируем: +7 700 123 45 67
+                const formatted = '+7 ' + phone.slice(0, 3) + ' ' + phone.slice(3, 6) + ' ' + phone.slice(6, 8) + ' ' + phone
+                    .slice(8, 10);
+                profilePhone.textContent = '📱 ' + formatted;
             } else {
                 profilePhone.textContent = '📱 Нет телефона';
             }
@@ -1465,7 +1504,7 @@
             input.click();
         }
 
-        // ----- Админ -----
+        // ----- Админ (исправленный рендеринг) -----
         function renderAdminPanel() {
             const userList = Object.keys(state.users);
             const blockedCount = state.blockedUsers.length;
@@ -1499,7 +1538,7 @@
                 const isBlocked = state.blockedUsers.includes(u);
                 const filmsCount = state.films.filter(f => f.user === u).length;
                 const userData = state.users[u];
-                const phone = userData ? userData.phone : '—';
+                const phone = userData ? '+7 ' + userData.phone : '—';
                 const password = userData ? userData.password : '—';
 
                 return `
@@ -1633,7 +1672,7 @@
             let csv = 'Пользователь,Телефон,Пароль,Рулон,Гарантия,Дата,Окончание\n';
             state.films.forEach(f => {
                 const userData = state.users[f.user];
-                const phone = userData ? userData.phone : '—';
+                const phone = userData ? '+7' + userData.phone : '—';
                 const password = userData ? userData.password : '—';
                 const info = state.catalog.find(c => c.roll === f.roll);
                 csv +=
@@ -1752,9 +1791,9 @@
                 showAuthScreen();
             }
 
-            // Инициализация сканера (скрыто)
-            if (typeof Html5Qrcode === 'undefined') {
-                console.warn('Html5Qrcode не загружен. Проверьте интернет.');
+            // Проверка загрузки QR-библиотеки
+            if (typeof QRCode === 'undefined') {
+                console.warn('QRCode библиотека не загружена. Проверьте интернет.');
             }
         }
 

@@ -8,6 +8,8 @@
     <meta name="apple-mobile-web-app-title" content="ZR Kazakhstan">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
     <title>ZR Kazakhstan — Гарантия</title>
+    <!-- БИБЛИОТЕКА ДЛЯ QR-КОДОВ -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         /* ===== ОСНОВНЫЕ ПЕРЕМЕННЫЕ ===== */
         * {
@@ -85,6 +87,9 @@
                 color: #c9a84c !important;
                 border-bottom-color: #c9a84c !important;
             }
+            .qr-modal-content {
+                background: #16161f !important;
+            }
         }
 
         .container {
@@ -154,12 +159,6 @@
         .input::placeholder {
             color: #bbb;
         }
-        .input.error-input {
-            border-color: #e74c3c;
-        }
-        .input.success-input {
-            border-color: #27ae60;
-        }
 
         /* ===== КНОПКИ ===== */
         .btn {
@@ -202,6 +201,12 @@
             font-size: 14px;
             width: auto;
             display: inline-block;
+        }
+        .btn-qr {
+            background: #6c5ce7;
+        }
+        .btn-qr:hover {
+            background: #5a4bd1;
         }
 
         /* ===== ОШИБКИ ===== */
@@ -302,9 +307,6 @@
         .logout-btn:hover {
             transform: scale(1.05);
         }
-        .logout-btn:active {
-            transform: scale(0.95);
-        }
 
         /* ===== ПРОФИЛЬ ===== */
         .profile-header {
@@ -321,10 +323,6 @@
             object-fit: cover;
             background: #e8e0d8;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-        .profile-avatar:hover {
-            transform: scale(1.05);
         }
         .profile-info {
             flex: 1;
@@ -355,54 +353,104 @@
             color: #8888aa;
         }
 
-        /* ===== ГАРАНТИЯ ===== */
-        .warranty-info {
-            background: #f0ece6;
-            border-radius: 12px;
-            padding: 12px;
-            text-align: center;
-            margin-bottom: 12px;
-            transition: background 0.3s;
+        /* ===== ВКЛАДКИ ===== */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e8e0d8;
+            overflow-x: auto;
         }
-        .warranty-name {
-            font-weight: 600;
-        }
-        .warranty-days {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .warranty-ok {
-            color: #27ae60;
-        }
-        .warranty-expired {
-            color: #e74c3c;
-        }
-        .warranty-date {
-            font-size: 12px;
+        .tab-button {
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
             color: #8888aa;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .tab-button.active {
+            color: #c9a84c;
+            border-bottom-color: #c9a84c;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
         }
 
-        /* ===== СТАТИСТИКА АДМИНА ===== */
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            background: #f0ece6;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 12px;
-            transition: background 0.3s;
-        }
-        .stats-item {
+        /* ===== ПЕРЕКЛЮЧЕНИЕ АВТОРИЗАЦИИ ===== */
+        .switch-link {
             text-align: center;
-        }
-        .stats-number {
-            font-size: 22px;
-            font-weight: bold;
+            margin-top: 16px;
             color: #c9a84c;
+            cursor: pointer;
+            font-weight: 500;
         }
-        .stats-label {
-            font-size: 11px;
+        .switch-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== QR-МОДАЛКА ===== */
+        .qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .qr-modal.active {
+            display: flex;
+        }
+        .qr-modal-content {
+            background: #fff;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .qr-modal-content h3 {
+            margin-bottom: 8px;
+        }
+        .qr-modal-content p {
             color: #8888aa;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .qr-modal-content .qr-code {
+            display: flex;
+            justify-content: center;
+            margin: 16px 0;
+            padding: 16px;
+            background: #fff;
+            border-radius: 12px;
+        }
+        .qr-modal-content .qr-code canvas,
+        .qr-modal-content .qr-code img {
+            width: 200px !important;
+            height: 200px !important;
+        }
+        .qr-modal-content .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .qr-modal-content .btn-group .btn {
+            flex: 1;
+            margin-bottom: 0;
         }
 
         /* ===== АДМИН-СПИСКИ ===== */
@@ -438,59 +486,28 @@
         .user-item .user-status.blocked {
             background: #e74c3c;
         }
-        .admin-hint {
-            margin-top: 12px;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 13px;
-            color: #8888aa;
-        }
 
-        /* ===== ВКЛАДКИ ===== */
-        .tabs {
+        /* ===== СТАТИСТИКА ===== */
+        .stats {
             display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-            border-bottom: 2px solid #e8e0d8;
-            overflow-x: auto;
+            justify-content: space-around;
+            background: #f0ece6;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            transition: background 0.3s;
         }
-        .tab-button {
-            padding: 10px 16px;
-            border: none;
-            background: transparent;
-            color: #8888aa;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .tab-button.active {
-            color: #c9a84c;
-            border-bottom-color: #c9a84c;
-        }
-        .tab-button:hover {
-            color: #c9a84c;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-
-        /* ===== ПЕРЕКЛЮЧЕНИЕ АВТОРИЗАЦИИ ===== */
-        .switch-link {
+        .stats-item {
             text-align: center;
-            margin-top: 16px;
-            color: #c9a84c;
-            cursor: pointer;
-            font-weight: 500;
         }
-        .switch-link:hover {
-            text-decoration: underline;
+        .stats-number {
+            font-size: 22px;
+            font-weight: bold;
+            color: #c9a84c;
+        }
+        .stats-label {
+            font-size: 11px;
+            color: #8888aa;
         }
 
         /* ===== QR-СКАНЕР ===== */
@@ -521,10 +538,6 @@
             color: white;
             font-size: 24px;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-        #scannerModal .close:hover {
-            background: rgba(255, 255, 255, 0.3);
         }
         #video {
             width: 100%;
@@ -540,23 +553,6 @@
             color: #fff;
             font-size: 16px;
             opacity: 0.8;
-        }
-
-        /* ===== ФОРГЕТ ПАРОЛЬ ===== */
-        .forgot-link {
-            text-align: right;
-            margin-top: -8px;
-            margin-bottom: 12px;
-        }
-        .forgot-link a {
-            color: #8888aa;
-            font-size: 13px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .forgot-link a:hover {
-            color: #c9a84c;
-            text-decoration: underline;
         }
 
         /* ===== УТИЛИТЫ ===== */
@@ -576,23 +572,25 @@
             color: #fff;
             font-size: 20px;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-        .scan-btn:hover {
-            transform: scale(1.02);
-        }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .mb-8 {
-            margin-bottom: 8px;
-        }
-        .text-center {
-            text-align: center;
         }
         .text-muted {
             color: #8888aa;
             font-size: 13px;
+        }
+        .forgot-link {
+            text-align: right;
+            margin-top: -8px;
+            margin-bottom: 12px;
+        }
+        .forgot-link a {
+            color: #8888aa;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .forgot-link a:hover {
+            color: #c9a84c;
+            text-decoration: underline;
         }
 
         /* ===== АНИМАЦИИ ===== */
@@ -610,7 +608,6 @@
             animation: fadeIn 0.3s ease-out;
         }
 
-        /* ===== АДАПТИВ ===== */
         @media (max-width: 480px) {
             body {
                 padding: 12px;
@@ -634,6 +631,14 @@
             .tab-button {
                 font-size: 12px;
                 padding: 8px 12px;
+            }
+            .qr-modal-content {
+                padding: 20px;
+            }
+            .qr-modal-content .qr-code canvas,
+            .qr-modal-content .qr-code img {
+                width: 150px !important;
+                height: 150px !important;
             }
         }
     </style>
@@ -674,13 +679,11 @@
                 <button class="logout-btn" id="userLogoutBtn">🚪</button>
             </div>
 
-            <!-- Вкладки -->
             <div class="tabs">
                 <button class="tab-button active" data-tab="tabRecords">📋 Записи</button>
                 <button class="tab-button" data-tab="tabProfile">👤 Профиль</button>
             </div>
 
-            <!-- Вкладка: Записи -->
             <div id="tabRecords" class="tab-content active">
                 <div class="card">
                     <div class="flex">
@@ -701,7 +704,6 @@
                 <div id="userRecords"></div>
             </div>
 
-            <!-- Вкладка: Профиль -->
             <div id="tabProfile" class="tab-content">
                 <div class="card">
                     <div class="profile-header">
@@ -746,7 +748,6 @@
                 <button class="logout-btn" id="adminLogoutBtn">🚪</button>
             </div>
 
-            <!-- Вкладки админа -->
             <div class="tabs">
                 <button class="tab-button active" data-tab="adminDashboard">📊 Дашборд</button>
                 <button class="tab-button" data-tab="adminUsers">👥 Пользователи</button>
@@ -754,7 +755,6 @@
                 <button class="tab-button" data-tab="adminLogs">📜 Логи</button>
             </div>
 
-            <!-- Вкладка: Дашборд -->
             <div id="adminDashboard" class="tab-content active">
                 <div class="stats" id="adminStats">
                     <div class="stats-item">
@@ -776,14 +776,11 @@
                 </div>
                 <div class="card">
                     <div style="font-weight:600; margin-bottom:8px;">📈 Активность сегодня</div>
-                    <div id="adminActivitySummary" style="font-size:14px; color:#8888aa;">
-                        Загрузка данных...
-                    </div>
+                    <div id="adminActivitySummary" style="font-size:14px; color:#8888aa;"></div>
                 </div>
                 <button class="btn btn-success" id="exportCSVBtn">📥 Экспорт всех данных (CSV)</button>
             </div>
 
-            <!-- Вкладка: Пользователи -->
             <div id="adminUsers" class="tab-content">
                 <div class="card">
                     <div style="font-weight:600; margin-bottom:12px;">👥 Управление пользователями</div>
@@ -791,7 +788,6 @@
                 </div>
             </div>
 
-            <!-- Вкладка: Рулоны -->
             <div id="adminCatalog" class="tab-content">
                 <div class="card">
                     <div style="font-weight:600; margin-bottom:12px;">📦 Добавить рулон в справочник</div>
@@ -805,7 +801,6 @@
                 <div id="adminCatalogList"></div>
             </div>
 
-            <!-- Вкладка: Логи -->
             <div id="adminLogs" class="tab-content">
                 <div class="card">
                     <div style="font-weight:600; margin-bottom:12px;">📜 Логи действий</div>
@@ -819,6 +814,20 @@
             <video id="video" autoplay playsinline></video>
             <button class="close" id="closeScannerBtn">✕</button>
             <div class="scanner-hint">Наведите камеру на QR-код рулона</div>
+        </div>
+
+        <!-- ========== QR-ГЕНЕРАТОР (МОДАЛКА) ========== -->
+        <div id="qrModal" class="qr-modal">
+            <div class="qr-modal-content">
+                <h3 id="qrModalTitle">📱 QR-код рулона</h3>
+                <p id="qrModalSub">Сканируйте, чтобы быстро добавить рулон</p>
+                <div class="qr-code" id="qrCodeContainer"></div>
+                <div style="font-size:14px; font-weight:600; margin-bottom:8px;" id="qrRollNumber">ZR-001</div>
+                <div class="btn-group">
+                    <button class="btn btn-success btn-sm" id="downloadQrBtn">⬇️ Скачать PNG</button>
+                    <button class="btn btn-secondary btn-sm" id="closeQrBtn">Закрыть</button>
+                </div>
+            </div>
         </div>
 
         <!-- ========== МОДАЛКА ЗАБЫЛИ ПАРОЛЬ ========== -->
@@ -836,7 +845,7 @@
 
     <script>
         // ============================================
-        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ (ПРЕМИУМ-ВЕРСИЯ)
+        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ (С QR-ГЕНЕРАЦИЕЙ)
         // ============================================
 
         // ----- Состояние -----
@@ -853,6 +862,7 @@
             isRegister: false,
             currentTab: 'tabRecords',
             adminTab: 'adminDashboard',
+            qrInstance: null,
         };
 
         // ----- DOM-элементы -----
@@ -889,7 +899,6 @@
         const userCount = $('userCount');
         const userRecords = $('userRecords');
 
-        // Профиль
         const profileAvatar = $('profileAvatar');
         const profileName = $('profileName');
         const profileLogin = $('profileLogin');
@@ -898,7 +907,6 @@
         const profileExpiredWarranty = $('profileExpiredWarranty');
         const changeAvatarBtn = $('changeAvatarBtn');
 
-        // Админ
         const adminLogoutBtn = $('adminLogoutBtn');
         const statUsers = $('statUsers');
         const statFilms = $('statFilms');
@@ -920,6 +928,15 @@
         const scannerModal = $('scannerModal');
         const closeScannerBtn = $('closeScannerBtn');
         const video = $('video');
+
+        // QR-модалка
+        const qrModal = $('qrModal');
+        const qrModalTitle = $('qrModalTitle');
+        const qrModalSub = $('qrModalSub');
+        const qrCodeContainer = $('qrCodeContainer');
+        const qrRollNumber = $('qrRollNumber');
+        const downloadQrBtn = $('downloadQrBtn');
+        const closeQrBtn = $('closeQrBtn');
 
         // ----- Инициализация данных -----
         function loadData() {
@@ -1044,7 +1061,6 @@
             }
 
             if (state.isRegister) {
-                // Регистрация
                 const loginCheck = validateLogin(login);
                 if (!loginCheck.valid) {
                     showError(authError, '❌ ' + loginCheck.msg);
@@ -1073,7 +1089,6 @@
                 return;
             }
 
-            // Вход
             if (login === 'admin' && password === 'admin123') {
                 state.isLoggedIn = true;
                 state.isAdmin = true;
@@ -1119,7 +1134,6 @@
             confirmPasswordInput.value = '';
         }
 
-        // ----- Забыли пароль -----
         function showForgotModal() {
             forgotModal.style.display = 'flex';
             forgotLoginInput.value = '';
@@ -1141,6 +1155,60 @@
                 addLog('Запрос восстановления пароля: ' + login);
             } else {
                 showError(forgotError, '❌ Пользователь с таким логином не найден');
+            }
+        }
+
+        // ----- QR-ГЕНЕРАТОР -----
+        function showQrModal(roll) {
+            const catalogItem = state.catalog.find(c => c.roll === roll);
+            if (!catalogItem) {
+                alert('❌ Рулон не найден');
+                return;
+            }
+
+            qrModalTitle.textContent = '📱 QR-код: ' + roll;
+            qrModalSub.textContent = 'Модель: ' + catalogItem.name + ' | До: ' + new Date(catalogItem.endDate).toLocaleDateString('ru-RU');
+            qrRollNumber.textContent = roll;
+
+            // Генерируем QR-код
+            qrCodeContainer.innerHTML = '';
+            try {
+                state.qrInstance = new QRCode(qrCodeContainer, {
+                    text: roll,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (e) {
+                // Если библиотека не загрузилась
+                qrCodeContainer.innerHTML = '<div style="padding:20px; border:2px dashed #c9a84c; border-radius:12px; font-size:16px; color:#8888aa;">QR-код: ' + roll + '</div>';
+            }
+
+            qrModal.classList.add('active');
+            addLog('Сгенерировал QR для: ' + roll);
+        }
+
+        function closeQrModal() {
+            qrModal.classList.remove('active');
+            if (state.qrInstance) {
+                state.qrInstance.clear();
+                state.qrInstance = null;
+            }
+            qrCodeContainer.innerHTML = '';
+        }
+
+        function downloadQr() {
+            const canvas = qrCodeContainer.querySelector('canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'qr-' + qrRollNumber.textContent + '.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                addLog('Скачал QR для: ' + qrRollNumber.textContent);
+            } else {
+                alert('❌ Сначала сгенерируйте QR-код');
             }
         }
 
@@ -1291,7 +1359,6 @@
             statCatalog.textContent = state.catalog.length;
             statBlocked.textContent = blockedCount;
 
-            // Активность за сегодня
             const today = new Date().toLocaleDateString('ru-RU');
             const todayLogs = state.logs.filter(l => l.time.includes(today));
             adminActivitySummary.innerHTML = `
@@ -1367,7 +1434,10 @@
                         <div style="font-size:13px; color:#8888aa;">${item.name}</div>
                         <div style="font-size:12px; color:#8888aa;">До ${new Date(item.endDate).toLocaleDateString('ru-RU')}</div>
                     </div>
-                    <button onclick="deleteCatalogItem('${item.roll}')" style="background:none; border:none; font-size:20px; cursor:pointer; color:#e74c3c;">🗑️</button>
+                    <div>
+                        <button onclick="showQrModal('${item.roll}')" class="btn btn-sm btn-qr" style="margin-right:8px; padding:4px 12px; font-size:12px;">📱 QR</button>
+                        <button onclick="deleteCatalogItem('${item.roll}')" style="background:none; border:none; font-size:20px; cursor:pointer; color:#e74c3c;">🗑️</button>
+                    </div>
                 </div>
             `).join('');
         }
@@ -1419,7 +1489,6 @@
             `).join('');
         }
 
-        // ----- Экспорт CSV -----
         function exportCSV() {
             let csv = 'Пользователь,Рулон,Гарантия,Дата,Окончание\n';
             state.films.forEach(f => {
@@ -1464,7 +1533,7 @@
 
         function scanCode() {
             if (!scannerModal.classList.contains('active')) return;
-            // Имитация сканирования
+            // Имитация сканирования — в реальном проекте замените на библиотеку jsQR
             setTimeout(() => {
                 if (scannerModal.classList.contains('active')) {
                     scanCode();
@@ -1486,11 +1555,11 @@
         // ----- Вкладки -----
         function switchTab(tabId) {
             state.currentTab = tabId;
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#userScreen .tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#userScreen .tab-button').forEach(el => el.classList.remove('active'));
             const tabContent = document.getElementById(tabId);
             if (tabContent) tabContent.classList.add('active');
-            document.querySelector(`.tab-button[data-tab="${tabId}"]`)?.classList.add('active');
+            document.querySelector(`#userScreen .tab-button[data-tab="${tabId}"]`)?.classList.add('active');
         }
 
         function switchAdminTab(tabId) {
@@ -1505,7 +1574,6 @@
         // ----- Утилиты -----
         function showError(el, msg) {
             el.textContent = msg;
-            el.classList.remove('hidden');
             el.classList.remove('hidden');
         }
 
@@ -1545,21 +1613,27 @@
             adminCatalogSearch?.addEventListener('input', renderCatalog);
             exportCSVBtn.addEventListener('click', exportCSV);
 
+            // QR-генератор
+            closeQrBtn.addEventListener('click', closeQrModal);
+            downloadQrBtn.addEventListener('click', downloadQr);
+
             // Вкладки
-            document.querySelectorAll('.tab-button').forEach(btn => {
+            document.querySelectorAll('#userScreen .tab-button').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const tabId = this.dataset.tab;
-                    if (this.closest('#adminScreen')) {
-                        switchAdminTab(tabId);
-                    } else {
-                        switchTab(tabId);
-                    }
+                    switchTab(this.dataset.tab);
+                });
+            });
+            document.querySelectorAll('#adminScreen .tab-button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchAdminTab(this.dataset.tab);
                 });
             });
 
             // Экспорт функций для HTML
             window.toggleBlockUser = toggleBlockUser;
             window.deleteCatalogItem = deleteCatalogItem;
+            window.showQrModal = showQrModal;
+            window.closeQrModal = closeQrModal;
 
             if (state.isLoggedIn) {
                 if (state.isAdmin) showAdminScreen();

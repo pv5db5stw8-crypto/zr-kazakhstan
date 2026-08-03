@@ -9,6 +9,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
     <title>ZR Kazakhstan — Гарантия</title>
     <style>
+        /* ===== ОСНОВНЫЕ ПЕРЕМЕННЫЕ ТЕМЫ ===== */
         * {
             margin: 0;
             padding: 0;
@@ -22,11 +23,55 @@
             min-height: 100vh;
             padding: 20px;
             padding-top: 50px;
+            transition: background 0.3s, color 0.3s;
         }
 
-        body.dark {
-            background: #0f0e12;
-            color: #f0ece6;
+        /* ТЁМНАЯ ТЕМА (автоматически) */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #0f0e12;
+                color: #f0ece6;
+            }
+            .card {
+                background: #1c1a22 !important;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+            }
+            .input {
+                background: #2a2732 !important;
+                color: #f0ece6 !important;
+            }
+            .input::placeholder {
+                color: #6b6359 !important;
+            }
+            .record {
+                background: #2a2732 !important;
+            }
+            .stats {
+                background: #2a2732 !important;
+            }
+            .warranty-info {
+                background: #2a2732 !important;
+            }
+            .error {
+                background: rgba(231, 76, 60, 0.2) !important;
+                color: #e74c3c !important;
+            }
+            .admin-hint {
+                background: rgba(201, 168, 76, 0.15) !important;
+                color: #b5aba1 !important;
+            }
+            .user-item {
+                border-bottom-color: #2a2732 !important;
+            }
+            .header-sub {
+                color: #b5aba1 !important;
+            }
+            .stats-label {
+                color: #b5aba1 !important;
+            }
+            .warranty-date {
+                color: #6b6359 !important;
+            }
         }
 
         .container {
@@ -34,55 +79,40 @@
             margin: 0 auto;
         }
 
-        /* Логотип */
+        /* ===== ЛОГОТИП (ВАША КАРТИНКА) ===== */
         .logo {
             text-align: center;
             margin-bottom: 20px;
         }
-
-        .logo-icon {
-            display: inline-block;
-            font-size: 60px;
-            background: #1a1a2e;
-            color: #FFD700;
-            width: 90px;
-            height: 90px;
-            line-height: 90px;
-            border-radius: 50%;
-            border: 3px solid #FFD700;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
-            font-weight: bold;
+        .logo img {
+            width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
         }
-
         .logo-text {
             font-size: 18px;
             font-weight: 700;
-            color: #FFD700;
+            color: #c9a84c;
             letter-spacing: 4px;
             margin-top: 6px;
             display: block;
         }
-
         .logo-sub {
             font-size: 13px;
             color: #b5aba1;
             letter-spacing: 2px;
         }
 
-        /* Карточки */
+        /* ===== КАРТОЧКИ ===== */
         .card {
             background: #ffffff;
             border-radius: 20px;
             padding: 24px;
             margin-bottom: 16px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: background 0.3s, box-shadow 0.3s;
         }
-
-        body.dark .card {
-            background: #1c1a22;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
-
         .card-title {
             font-size: 20px;
             font-weight: 600;
@@ -90,7 +120,7 @@
             text-align: center;
         }
 
-        /* Поля ввода */
+        /* ===== ПОЛЯ ВВОДА ===== */
         .input {
             width: 100%;
             padding: 14px;
@@ -100,18 +130,13 @@
             font-size: 16px;
             margin-bottom: 12px;
             outline: none;
+            transition: background 0.3s, color 0.3s;
         }
-
-        body.dark .input {
-            background: #2a2732;
-            color: #f0ece6;
-        }
-
         .input::placeholder {
             color: #b5aba1;
         }
 
-        /* Кнопки */
+        /* ===== КНОПКИ ===== */
         .btn {
             width: 100%;
             padding: 16px;
@@ -124,25 +149,15 @@
             cursor: pointer;
             transition: opacity 0.2s;
         }
-
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        .btn-danger {
-            background: #c0392b;
-        }
-
-        .btn-success {
-            background: #27ae60;
-        }
-
+        .btn:hover { opacity: 0.9; }
+        .btn-danger { background: #c0392b; }
+        .btn-success { background: #27ae60; }
         .btn-secondary {
             background: transparent;
             color: #c9a84c;
         }
 
-        /* Сообщения об ошибках */
+        /* ===== ОШИБКИ ===== */
         .error {
             background: rgba(192, 57, 43, 0.15);
             color: #c0392b;
@@ -151,69 +166,42 @@
             margin-bottom: 12px;
             font-weight: 500;
         }
+        .hidden { display: none; }
 
-        body.dark .error {
-            background: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
-        }
-
-        /* Список записей */
+        /* ===== ЗАПИСИ ===== */
         .record {
             background: #fff;
             border-radius: 12px;
             padding: 14px;
             margin-bottom: 10px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: background 0.3s;
         }
+        .record-roll { font-size: 16px; font-weight: 600; }
+        .record-warranty { font-size: 14px; color: #c9a84c; margin-top: 2px; }
+        .record-date { font-size: 12px; color: #b5aba1; margin-top: 4px; }
+        .record-status { font-size: 13px; font-weight: 600; margin-top: 4px; }
+        .status-ok { color: #27ae60; }
+        .status-expired { color: #c0392b; }
 
-        body.dark .record {
-            background: #2a2732;
-        }
-
-        .record-roll {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .record-warranty {
-            font-size: 14px;
-            color: #c9a84c;
-            margin-top: 2px;
-        }
-
-        .record-date {
-            font-size: 12px;
-            color: #b5aba1;
-            margin-top: 4px;
-        }
-
-        .record-status {
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        .status-ok {
-            color: #27ae60;
-        }
-
-        .status-expired {
-            color: #c0392b;
-        }
-
-        /* Ссылки переключения */
+        /* ===== ПЕРЕКЛЮЧЕНИЕ ===== */
         .switch-link {
             text-align: center;
             margin-top: 16px;
             color: #c9a84c;
             cursor: pointer;
         }
+        .switch-link:hover { text-decoration: underline; }
 
-        .switch-link:hover {
-            text-decoration: underline;
+        /* ===== ШАПКА ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
         }
-
-        /* Кнопка выхода */
+        .header-title { font-size: 22px; font-weight: bold; }
+        .header-sub { font-size: 14px; color: #6b6359; }
         .logout-btn {
             width: 40px;
             height: 40px;
@@ -225,86 +213,22 @@
             cursor: pointer;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .header-title {
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .header-sub {
-            font-size: 14px;
-            color: #6b6359;
-        }
-
-        body.dark .header-sub {
-            color: #b5aba1;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .flex {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .flex-1 {
-            flex: 1;
-        }
-
-        .scan-btn {
-            padding: 14px 16px;
-            border: none;
-            border-radius: 12px;
-            background: #c9a84c;
-            color: #fff;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
+        /* ===== ГАРАНТИЯ ===== */
         .warranty-info {
             background: #f0ece6;
             border-radius: 12px;
             padding: 12px;
             text-align: center;
             margin-bottom: 12px;
+            transition: background 0.3s;
         }
+        .warranty-name { font-weight: 600; }
+        .warranty-days { font-size: 18px; font-weight: bold; }
+        .warranty-ok { color: #27ae60; }
+        .warranty-expired { color: #c0392b; }
+        .warranty-date { font-size: 12px; color: #6b6359; }
 
-        body.dark .warranty-info {
-            background: #2a2732;
-        }
-
-        .warranty-name {
-            font-weight: 600;
-        }
-
-        .warranty-days {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .warranty-ok {
-            color: #27ae60;
-        }
-
-        .warranty-expired {
-            color: #c0392b;
-        }
-
-        .warranty-date {
-            font-size: 12px;
-            color: #6b6359;
-        }
-
-        /* Админ-статистика */
+        /* ===== СТАТИСТИКА АДМИНА ===== */
         .stats {
             display: flex;
             justify-content: space-around;
@@ -312,43 +236,32 @@
             border-radius: 12px;
             padding: 14px;
             margin-bottom: 12px;
+            transition: background 0.3s;
         }
+        .stats-item { text-align: center; }
+        .stats-number { font-size: 22px; font-weight: bold; }
+        .stats-label { font-size: 12px; color: #6b6359; }
 
-        body.dark .stats {
-            background: #2a2732;
-        }
-
-        .stats-item {
-            text-align: center;
-        }
-
-        .stats-number {
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .stats-label {
-            font-size: 12px;
-            color: #6b6359;
-        }
-
-        body.dark .stats-label {
-            color: #b5aba1;
-        }
-
-        /* Админ-список пользователей */
+        /* ===== АДМИН-СПИСКИ ===== */
         .user-item {
             display: flex;
             justify-content: space-between;
             padding: 10px 0;
             border-bottom: 1px solid #e8e0d8;
+            transition: border-color 0.3s;
+        }
+        .admin-hint {
+            margin-top: 12px;
+            padding: 10px;
+            background: rgba(201, 168, 76, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+            color: #6b6359;
+            transition: background 0.3s, color 0.3s;
         }
 
-        body.dark .user-item {
-            border-bottom-color: #2a2732;
-        }
-
-        /* Стили для модалки QR-сканера */
+        /* ===== QR-СКАНЕР (МОДАЛКА) ===== */
         #scannerModal {
             position: fixed;
             top: 0;
@@ -361,11 +274,7 @@
             align-items: center;
             z-index: 9999;
         }
-
-        #scannerModal.active {
-            display: flex;
-        }
-
+        #scannerModal.active { display: flex; }
         #scannerModal .close {
             position: absolute;
             top: 40px;
@@ -381,13 +290,11 @@
             color: white;
             font-size: 24px;
         }
-
         #video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .scanner-hint {
             position: absolute;
             bottom: 80px;
@@ -398,24 +305,22 @@
             font-size: 16px;
         }
 
-        .admin-hint {
-            margin-top: 12px;
-            padding: 10px;
-            background: rgba(201, 168, 76, 0.1);
-            border-radius: 8px;
-            text-align: center;
-            font-size: 13px;
-            color: #6b6359;
-        }
-
-        body.dark .admin-hint {
-            background: rgba(201, 168, 76, 0.15);
-            color: #b5aba1;
-        }
-
+        /* ===== АДАПТИВ ===== */
         @media (max-width: 480px) {
             body { padding: 12px; padding-top: 30px; }
             .card { padding: 16px; }
+        }
+
+        .flex { display: flex; align-items: center; gap: 10px; }
+        .flex-1 { flex: 1; }
+        .scan-btn {
+            padding: 14px 16px;
+            border: none;
+            border-radius: 12px;
+            background: #c9a84c;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -424,7 +329,8 @@
         <!-- ========== ЭКРАН АВТОРИЗАЦИИ ========== -->
         <div id="authScreen">
             <div class="logo">
-                <span class="logo-icon">ZR</span>
+                <!-- ВАШ ЛОГОТИП (из картинки) -->
+                <img src="https://i.ibb.co.com/ynzbM3k4/77.jpg" alt="ZR Kazakhstan Logo">
                 <span class="logo-text">KAZAKHSTAN</span>
                 <span class="logo-sub">Гарантия качества</span>
             </div>
@@ -541,8 +447,6 @@
 
         // ----- DOM-элементы -----
         const $ = (id) => document.getElementById(id);
-        const $$ = (sel) => document.querySelectorAll(sel);
-
         const authScreen = $('authScreen');
         const userScreen = $('userScreen');
         const adminScreen = $('adminScreen');
@@ -733,7 +637,7 @@
             el.classList.remove('hidden');
         }
 
-        // ----- Пользователь: добавление записи -----
+        // ----- Пользователь -----
         function handleAddRecord() {
             const roll = rollInput.value.trim();
             const warranty = warrantyInput.value.trim();
@@ -840,7 +744,6 @@
             adminFilmCount.textContent = state.films.length;
             catalogCount.textContent = state.catalog.length;
 
-            // Список пользователей
             const filmStats = {};
             userList.forEach(u => {
                 filmStats[u] = state.films.filter(f => f.user === u).length;
@@ -854,10 +757,7 @@
                     </div>
                 `).join('');
 
-            // Справочник
             renderCatalog();
-
-            // Все записи
             renderAdminRecords('');
         }
 
@@ -937,7 +837,7 @@
             }).join('');
         }
 
-        // ----- QR-сканер -----
+        // ----- QR -----
         let stream = null;
 
         async function startScanner() {
@@ -951,7 +851,6 @@
                 scanCode();
             } catch (err) {
                 alert('❌ Нет доступа к камере');
-                console.log(err);
             }
         }
 
@@ -966,31 +865,12 @@
 
         function scanCode() {
             if (!scannerModal.classList.contains('active')) return;
-
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-            // Простой поиск QR-кода (имитация)
-            // В реальном приложении используйте библиотеку jsQR
-            // Для простоты мы просто ищем текст в изображении (демо-режим)
-            // В реальном приложении замените на jsQR
-
             setTimeout(() => {
                 if (scannerModal.classList.contains('active')) {
-                    // Демо: имитация сканирования
-                    // В реальном приложении здесь будет jsQR
                     scanCode();
                 }
             }, 500);
         }
-
-        // Временная заглушка для QR-сканера
-        // В реальном приложении используйте библиотеку jsQR
-        // Для демонстрации мы просто просим ввести номер вручную
 
         // ----- Выход -----
         function logout() {
@@ -1007,28 +887,23 @@
         function init() {
             loadData();
 
-            // Авторизация
             authBtn.addEventListener('click', handleAuth);
             switchAuthLink.addEventListener('click', toggleAuthMode);
             loginInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
             passwordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
             confirmPasswordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
 
-            // Пользователь
             addRecordBtn.addEventListener('click', handleAddRecord);
             userLogoutBtn.addEventListener('click', logout);
             rollInput.addEventListener('input', checkWarranty);
 
-            // QR-сканер
             scanBtn.addEventListener('click', startScanner);
             closeScannerBtn.addEventListener('click', stopScanner);
 
-            // Админ
             adminLogoutBtn.addEventListener('click', logout);
             adminAddCatalogBtn.addEventListener('click', handleAddCatalogItem);
             adminSearch.addEventListener('input', (e) => renderAdminRecords(e.target.value));
 
-            // Вход на главную
             if (state.isLoggedIn) {
                 if (state.isAdmin) showAdminScreen();
                 else showUserScreen();
@@ -1036,7 +911,6 @@
                 showAuthScreen();
             }
 
-            // Экспорт функций для HTML
             window.deleteCatalogItem = deleteCatalogItem;
         }
 

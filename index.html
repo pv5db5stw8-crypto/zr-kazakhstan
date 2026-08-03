@@ -8,8 +8,8 @@
     <meta name="apple-mobile-web-app-title" content="ZR Kazakhstan">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
     <title>ZR Kazakhstan — Гарантия</title>
-    <!-- БИБЛИОТЕКА ДЛЯ QR-КОДОВ -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <!-- QR-библиотека -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <style>
         /* ===== ОСНОВНЫЕ ПЕРЕМЕННЫЕ ===== */
         * {
@@ -27,7 +27,6 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* ТЁМНАЯ ТЕМА */
         @media (prefers-color-scheme: dark) {
             body {
                 background: #0a0a12;
@@ -64,9 +63,6 @@
             }
             .user-item {
                 border-bottom-color: #2a2a40 !important;
-            }
-            .admin-hint {
-                color: #8888aa !important;
             }
             .profile-avatar {
                 border-color: #333355 !important;
@@ -207,6 +203,12 @@
         }
         .btn-qr:hover {
             background: #5a4bd1;
+        }
+        .btn-whatsapp {
+            background: #25D366;
+        }
+        .btn-whatsapp:hover {
+            background: #1da851;
         }
 
         /* ===== ОШИБКИ ===== */
@@ -518,15 +520,29 @@
             width: 100%;
             height: 100%;
             background: #000;
+            z-index: 9999;
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
+            flex-direction: column;
         }
         #scannerModal.active {
             display: flex;
         }
-        #scannerModal .close {
+        #qr-reader {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            min-height: 400px;
+        }
+        #scannerResult {
+            color: #fff;
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            padding: 0 20px;
+        }
+        #closeScannerBtn {
             position: absolute;
             top: 40px;
             right: 20px;
@@ -539,20 +555,12 @@
             font-size: 24px;
             cursor: pointer;
         }
-        #video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
         .scanner-hint {
             position: absolute;
             bottom: 80px;
-            left: 0;
-            right: 0;
-            text-align: center;
             color: #fff;
-            font-size: 16px;
-            opacity: 0.8;
+            opacity: 0.6;
+            font-size: 14px;
         }
 
         /* ===== УТИЛИТЫ ===== */
@@ -660,9 +668,10 @@
                 <input class="input" id="passwordInput" placeholder="Пароль (заглавная, цифры, 8+ символов)" type="password" autocomplete="current-password">
                 <div id="confirmPasswordGroup" class="hidden">
                     <input class="input" id="confirmPasswordInput" placeholder="Подтвердите пароль" type="password">
+                    <input class="input" id="phoneInput" placeholder="Номер телефона (например 77001234567)">
                 </div>
                 <div class="forgot-link">
-                    <a id="forgotPasswordLink">Забыли пароль?</a>
+                    <a id="forgotPasswordLink">Забыли пароль? Обратитесь к администратору</a>
                 </div>
                 <button class="btn" id="authBtn">Войти</button>
                 <div class="switch-link" id="switchAuthLink">Нет аккаунта? Зарегистрироваться</div>
@@ -711,6 +720,7 @@
                         <div class="profile-info">
                             <div class="profile-name" id="profileName">Пользователь</div>
                             <div class="profile-email" id="profileLogin">@username</div>
+                            <div class="profile-email" id="profilePhone">📱 +7 700 123 45 67</div>
                         </div>
                         <button class="btn btn-sm btn-secondary" id="changeAvatarBtn">🖼️ Изменить</button>
                     </div>
@@ -783,7 +793,7 @@
 
             <div id="adminUsers" class="tab-content">
                 <div class="card">
-                    <div style="font-weight:600; margin-bottom:12px;">👥 Управление пользователями</div>
+                    <div style="font-weight:600; margin-bottom:12px;">👥 Управление пользователями (админ видит пароли)</div>
                     <div id="adminUserList"></div>
                 </div>
             </div>
@@ -811,12 +821,13 @@
 
         <!-- ========== QR-СКАНЕР ========== -->
         <div id="scannerModal">
-            <video id="video" autoplay playsinline></video>
-            <button class="close" id="closeScannerBtn">✕</button>
+            <div id="qr-reader"></div>
+            <div id="scannerResult">📷 Наведите камеру на QR-код</div>
+            <button id="closeScannerBtn">✕</button>
             <div class="scanner-hint">Наведите камеру на QR-код рулона</div>
         </div>
 
-        <!-- ========== QR-ГЕНЕРАТОР (МОДАЛКА) ========== -->
+        <!-- ========== QR-ГЕНЕРАТОР ========== -->
         <div id="qrModal" class="qr-modal">
             <div class="qr-modal-content">
                 <h3 id="qrModalTitle">📱 QR-код рулона</h3>
@@ -834,10 +845,10 @@
         <div id="forgotModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); z-index:10000; justify-content:center; align-items:center;">
             <div style="background:#fff; max-width:400px; width:90%; border-radius:20px; padding:24px; animation:fadeIn 0.3s ease-out;">
                 <div style="font-size:20px; font-weight:600; margin-bottom:16px;">🔑 Восстановление пароля</div>
-                <p style="color:#8888aa; margin-bottom:16px;">Введите ваш логин. Ссылка для восстановления будет отправлена на вашу почту (в демо-режиме).</p>
+                <p style="color:#8888aa; margin-bottom:16px;">Введите ваш логин. Администратор увидит ваш запрос и поможет восстановить пароль.</p>
                 <input class="input" id="forgotLoginInput" placeholder="Ваш логин">
                 <div id="forgotError" class="error hidden"></div>
-                <button class="btn" id="forgotSubmitBtn">📧 Отправить ссылку</button>
+                <button class="btn" id="forgotSubmitBtn">📧 Отправить запрос админу</button>
                 <button class="btn btn-secondary" id="forgotCloseBtn" style="margin-top:8px;">Закрыть</button>
             </div>
         </div>
@@ -845,7 +856,7 @@
 
     <script>
         // ============================================
-        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ (С QR-ГЕНЕРАЦИЕЙ)
+        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ
         // ============================================
 
         // ----- Состояние -----
@@ -853,7 +864,7 @@
             isLoggedIn: false,
             isAdmin: false,
             currentUser: '',
-            users: {},
+            users: {}, // { login: { password, phone } }
             films: [],
             catalog: [],
             blockedUsers: [],
@@ -863,6 +874,7 @@
             currentTab: 'tabRecords',
             adminTab: 'adminDashboard',
             qrInstance: null,
+            pendingResetRequests: {}, // { login: timestamp }
         };
 
         // ----- DOM-элементы -----
@@ -877,6 +889,7 @@
         const passwordInput = $('passwordInput');
         const confirmPasswordGroup = $('confirmPasswordGroup');
         const confirmPasswordInput = $('confirmPasswordInput');
+        const phoneInput = $('phoneInput');
         const authBtn = $('authBtn');
         const switchAuthLink = $('switchAuthLink');
         const forgotPasswordLink = $('forgotPasswordLink');
@@ -902,6 +915,7 @@
         const profileAvatar = $('profileAvatar');
         const profileName = $('profileName');
         const profileLogin = $('profileLogin');
+        const profilePhone = $('profilePhone');
         const profileFilmsCount = $('profileFilmsCount');
         const profileActiveWarranty = $('profileActiveWarranty');
         const profileExpiredWarranty = $('profileExpiredWarranty');
@@ -927,9 +941,9 @@
         const scanBtn = $('scanBtn');
         const scannerModal = $('scannerModal');
         const closeScannerBtn = $('closeScannerBtn');
-        const video = $('video');
+        const qrReader = $('qr-reader');
+        const scannerResult = $('scannerResult');
 
-        // QR-модалка
         const qrModal = $('qrModal');
         const qrModalTitle = $('qrModalTitle');
         const qrModalSub = $('qrModalSub');
@@ -1023,6 +1037,12 @@
             return { valid: true };
         }
 
+        function validatePhone(phone) {
+            if (phone.length < 10) return { valid: false, msg: 'Номер должен быть минимум 10 цифр' };
+            if (!/^[0-9]+$/.test(phone)) return { valid: false, msg: 'Только цифры' };
+            return { valid: true };
+        }
+
         // ----- Показать экраны -----
         function showAuthScreen() {
             authScreen.classList.remove('hidden');
@@ -1052,6 +1072,7 @@
         function handleAuth() {
             const login = loginInput.value.trim();
             const password = passwordInput.value.trim();
+            const phone = phoneInput.value.trim();
             authError.classList.add('hidden');
             authSuccess.classList.add('hidden');
 
@@ -1071,6 +1092,11 @@
                     showError(authError, '❌ ' + passCheck.msg);
                     return;
                 }
+                const phoneCheck = validatePhone(phone);
+                if (!phoneCheck.valid) {
+                    showError(authError, '❌ Телефон: ' + phoneCheck.msg);
+                    return;
+                }
                 const confirm = confirmPasswordInput.value.trim();
                 if (password !== confirm) {
                     showError(authError, '❌ Пароли не совпадают');
@@ -1080,15 +1106,16 @@
                     showError(authError, '❌ Пользователь уже существует');
                     return;
                 }
-                state.users[login] = password;
+                state.users[login] = { password: password, phone: phone };
                 state.userAvatars[login] = null;
                 saveData();
-                addLog('Зарегистрировался: ' + login);
+                addLog('Зарегистрировался: ' + login + ' (тел: ' + phone + ')');
                 showSuccess(authSuccess, '✅ Регистрация прошла успешно! Теперь войдите.');
                 toggleAuthMode();
                 return;
             }
 
+            // Вход
             if (login === 'admin' && password === 'admin123') {
                 state.isLoggedIn = true;
                 state.isAdmin = true;
@@ -1104,7 +1131,7 @@
                     showError(authError, '🚫 Аккаунт заблокирован. Обратитесь к администратору.');
                     return;
                 }
-                if (state.users[login] === password) {
+                if (state.users[login].password === password) {
                     state.isLoggedIn = true;
                     state.isAdmin = false;
                     state.currentUser = login;
@@ -1127,11 +1154,14 @@
             authBtn.textContent = state.isRegister ? 'Зарегистрироваться' : 'Войти';
             switchAuthLink.textContent = state.isRegister ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться';
             confirmPasswordGroup.classList.toggle('hidden');
+            if (!state.isRegister) phoneInput.classList.add('hidden');
+            else phoneInput.classList.remove('hidden');
             authError.classList.add('hidden');
             authSuccess.classList.add('hidden');
             loginInput.value = '';
             passwordInput.value = '';
             confirmPasswordInput.value = '';
+            phoneInput.value = '';
         }
 
         function showForgotModal() {
@@ -1150,9 +1180,25 @@
             }
 
             if (state.users[login]) {
-                alert('📧 Ссылка для восстановления пароля отправлена на почту, привязанную к аккаунту ' + login + ' (демо-режим).\nВаш пароль: ' + state.users[login]);
+                // Отправляем запрос админу (в логи)
+                addLog('🔔 ЗАПРОС ВОССТАНОВЛЕНИЯ ПАРОЛЯ от: ' + login);
+                state.pendingResetRequests[login] = Date.now();
+                saveData();
+
+                // Отправляем в WhatsApp (имитация)
+                const phone = state.users[login].phone;
+                if (phone) {
+                    const waUrl = 'https://wa.me/7' + phone + '?text=' + encodeURIComponent(
+                        '🔑 Запрос на восстановление пароля\n' +
+                        'Логин: ' + login + '\n' +
+                        'Ваш пароль: ' + state.users[login].password + '\n' +
+                        'С уважением, ZR Kazakhstan'
+                    );
+                    window.open(waUrl, '_blank');
+                }
+
+                alert('✅ Запрос отправлен администратору!\nАдминистратор свяжется с вами по WhatsApp.');
                 forgotModal.style.display = 'none';
-                addLog('Запрос восстановления пароля: ' + login);
             } else {
                 showError(forgotError, '❌ Пользователь с таким логином не найден');
             }
@@ -1167,10 +1213,10 @@
             }
 
             qrModalTitle.textContent = '📱 QR-код: ' + roll;
-            qrModalSub.textContent = 'Модель: ' + catalogItem.name + ' | До: ' + new Date(catalogItem.endDate).toLocaleDateString('ru-RU');
+            qrModalSub.textContent = 'Модель: ' + catalogItem.name + ' | До: ' + new Date(catalogItem.endDate).toLocaleDateString(
+            'ru-RU');
             qrRollNumber.textContent = roll;
 
-            // Генерируем QR-код
             qrCodeContainer.innerHTML = '';
             try {
                 state.qrInstance = new QRCode(qrCodeContainer, {
@@ -1182,7 +1228,6 @@
                     correctLevel: QRCode.CorrectLevel.H
                 });
             } catch (e) {
-                // Если библиотека не загрузилась
                 qrCodeContainer.innerHTML = '<div style="padding:20px; border:2px dashed #c9a84c; border-radius:12px; font-size:16px; color:#8888aa;">QR-код: ' + roll + '</div>';
             }
 
@@ -1210,6 +1255,66 @@
             } else {
                 alert('❌ Сначала сгенерируйте QR-код');
             }
+        }
+
+        // ----- QR-СКАНЕР (НОВЫЙ) -----
+        let html5QrCode = null;
+
+        async function startScanner() {
+            scannerResult.textContent = '🔄 Инициализация камеры...';
+            scannerModal.classList.add('active');
+
+            try {
+                html5QrCode = new Html5Qrcode("qr-reader");
+
+                const config = {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    formatsToSupport: [
+                        Html5QrcodeSupportedFormats.QR_CODE,
+                        Html5QrcodeSupportedFormats.EAN_13,
+                        Html5QrcodeSupportedFormats.CODE_128
+                    ]
+                };
+
+                await html5QrCode.start({ facingMode: "environment" },
+                    config,
+                    function(decodedText) {
+                        scannerResult.textContent = '✅ Найден код: ' + decodedText;
+                        if (rollInput) {
+                            rollInput.value = decodedText;
+                            rollInput.dispatchEvent(new Event('input'));
+                        }
+                        setTimeout(() => {
+                            stopScanner();
+                            alert('✅ Рулон отсканирован: ' + decodedText);
+                        }, 500);
+                    },
+                    function(errorMessage) {
+                        // Игнорируем
+                    }
+                );
+
+                scannerResult.textContent = '📷 Камера готова. Наведите на QR-код.';
+            } catch (err) {
+                scannerResult.textContent = '❌ Ошибка доступа к камере: ' + err.message;
+                setTimeout(() => {
+                    scannerModal.classList.remove('active');
+                }, 3000);
+            }
+        }
+
+        function stopScanner() {
+            if (html5QrCode) {
+                try {
+                    html5QrCode.stop().then(() => {
+                        html5QrCode.clear();
+                        html5QrCode = null;
+                    }).catch(err => {});
+                } catch (e) {}
+            }
+            scannerModal.classList.remove('active');
+            scannerResult.textContent = '📷 Наведите камеру на QR-код';
         }
 
         // ----- Пользователь -----
@@ -1317,6 +1422,16 @@
             const userFilms = state.films.filter(f => f.user === state.currentUser);
             profileName.textContent = state.currentUser;
             profileLogin.textContent = '@' + state.currentUser;
+
+            const userData = state.users[state.currentUser];
+            if (userData && userData.phone) {
+                const phone = userData.phone;
+                profilePhone.textContent = '📱 +7 ' + phone.slice(0, 3) + ' ' + phone.slice(3, 6) + ' ' + phone.slice(6, 8) +
+                    ' ' + phone.slice(8, 10);
+            } else {
+                profilePhone.textContent = '📱 Нет телефона';
+            }
+
             profileFilmsCount.textContent = userFilms.length;
 
             const active = userFilms.filter(f => {
@@ -1383,21 +1498,45 @@
             adminUserList.innerHTML = userList.map(u => {
                 const isBlocked = state.blockedUsers.includes(u);
                 const filmsCount = state.films.filter(f => f.user === u).length;
+                const userData = state.users[u];
+                const phone = userData ? userData.phone : '—';
+                const password = userData ? userData.password : '—';
+
                 return `
                     <div class="user-item">
                         <div class="user-info">
                             <span class="user-name">👤 ${u}</span>
-                            <span class="user-email">📦 ${filmsCount} плёнок</span>
+                            <span class="user-email">📱 ${phone} | 📦 ${filmsCount} плёнок</span>
+                            <span class="user-email" style="color:#c9a84c; font-weight:600;">🔑 Пароль: ${password}</span>
                         </div>
                         <div>
                             <span class="user-status ${isBlocked ? 'blocked' : ''}">${isBlocked ? '🚫 Заблокирован' : '✅ Активен'}</span>
                             <button onclick="toggleBlockUser('${u}')" class="btn btn-sm ${isBlocked ? 'btn-success' : 'btn-danger'}" style="margin-left:8px; padding:4px 12px; font-size:12px;">
                                 ${isBlocked ? 'Разблокировать' : 'Заблокировать'}
                             </button>
+                            <button onclick="sendWhatsApp('${u}')" class="btn btn-sm btn-whatsapp" style="margin-left:4px; padding:4px 12px; font-size:12px;">
+                                💬 WhatsApp
+                            </button>
                         </div>
                     </div>
                 `;
             }).join('');
+        }
+
+        function sendWhatsApp(login) {
+            const userData = state.users[login];
+            if (!userData || !userData.phone) {
+                alert('❌ У пользователя нет телефона');
+                return;
+            }
+            const phone = userData.phone;
+            const waUrl = 'https://wa.me/7' + phone + '?text=' + encodeURIComponent(
+                'Здравствуйте, ' + login + '!\n' +
+                'Это ZR Kazakhstan. Ваш пароль: ' + userData.password + '\n' +
+                'С уважением, администратор.'
+            );
+            window.open(waUrl, '_blank');
+            addLog('Отправил WhatsApp пользователю: ' + login);
         }
 
         function toggleBlockUser(username) {
@@ -1419,7 +1558,8 @@
 
         function renderCatalog() {
             const search = (adminCatalogSearch?.value || '').toLowerCase();
-            const filtered = state.catalog.filter(c => c.roll.toLowerCase().includes(search) || c.name.toLowerCase().includes(search));
+            const filtered = state.catalog.filter(c => c.roll.toLowerCase().includes(search) || c.name.toLowerCase().includes(
+            search));
             catalogCount.textContent = filtered.length;
 
             if (filtered.length === 0) {
@@ -1490,55 +1630,23 @@
         }
 
         function exportCSV() {
-            let csv = 'Пользователь,Рулон,Гарантия,Дата,Окончание\n';
+            let csv = 'Пользователь,Телефон,Пароль,Рулон,Гарантия,Дата,Окончание\n';
             state.films.forEach(f => {
+                const userData = state.users[f.user];
+                const phone = userData ? userData.phone : '—';
+                const password = userData ? userData.password : '—';
                 const info = state.catalog.find(c => c.roll === f.roll);
-                csv += `${f.user},${f.roll},${f.warranty},${f.date},${info ? info.endDate : '—'}\n`;
+                csv +=
+                    `${f.user},${phone},${password},${f.roll},${f.warranty},${f.date},${info ? info.endDate : '—'}\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'zr-kazakhstan-export-' + new Date().toISOString().slice(0,10) + '.csv';
+            a.download = 'zr-kazakhstan-export-' + new Date().toISOString().slice(0, 10) + '.csv';
             a.click();
             URL.revokeObjectURL(url);
             addLog('Экспортировал данные в CSV');
-        }
-
-        // ----- QR-сканер -----
-        let stream = null;
-
-        async function startScanner() {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: 'environment' }
-                });
-                video.srcObject = stream;
-                await video.play();
-                scannerModal.classList.add('active');
-                scanCode();
-            } catch (err) {
-                alert('❌ Нет доступа к камере');
-            }
-        }
-
-        function stopScanner() {
-            if (stream) {
-                stream.getTracks().forEach(t => t.stop());
-                stream = null;
-            }
-            video.srcObject = null;
-            scannerModal.classList.remove('active');
-        }
-
-        function scanCode() {
-            if (!scannerModal.classList.contains('active')) return;
-            // Имитация сканирования — в реальном проекте замените на библиотеку jsQR
-            setTimeout(() => {
-                if (scannerModal.classList.contains('active')) {
-                    scanCode();
-                }
-            }, 500);
         }
 
         // ----- Выход -----
@@ -1592,6 +1700,7 @@
             loginInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
             passwordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
             confirmPasswordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
+            phoneInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
             forgotPasswordLink.addEventListener('click', showForgotModal);
             forgotCloseBtn.addEventListener('click', () => { forgotModal.style.display = 'none'; });
             forgotSubmitBtn.addEventListener('click', handleForgotPassword);
@@ -1634,12 +1743,18 @@
             window.deleteCatalogItem = deleteCatalogItem;
             window.showQrModal = showQrModal;
             window.closeQrModal = closeQrModal;
+            window.sendWhatsApp = sendWhatsApp;
 
             if (state.isLoggedIn) {
                 if (state.isAdmin) showAdminScreen();
                 else showUserScreen();
             } else {
                 showAuthScreen();
+            }
+
+            // Инициализация сканера (скрыто)
+            if (typeof Html5Qrcode === 'undefined') {
+                console.warn('Html5Qrcode не загружен. Проверьте интернет.');
             }
         }
 

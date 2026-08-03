@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ZR Kazakhstan">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
+    <title>ZR Kazakhstan — Гарантия</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f0eb;
+            color: #2d2a24;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 50px;
+        }
+
+        body.dark {
+            background: #0f0e12;
+            color: #f0ece6;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Логотип */
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            display: inline-block;
+            font-size: 60px;
+            background: #1a1a2e;
+            color: #FFD700;
+            width: 90px;
+            height: 90px;
+            line-height: 90px;
+            border-radius: 50%;
+            border: 3px solid #FFD700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #FFD700;
+            letter-spacing: 4px;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .logo-sub {
+            font-size: 13px;
+            color: #b5aba1;
+            letter-spacing: 2px;
+        }
+
+        /* Карточки */
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        body.dark .card {
+            background: #1c1a22;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        /* Поля ввода */
+        .input {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #f0ece6;
+            font-size: 16px;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        body.dark .input {
+            background: #2a2732;
+            color: #f0ece6;
+        }
+
+        .input::placeholder {
+            color: #b5aba1;
+        }
+
+        /* Кнопки */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            background: #c9a84c;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-danger {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #c9a84c;
+        }
+
+        /* Сообщения об ошибках */
+        .error {
+            background: rgba(192, 57, 43, 0.15);
+            color: #c0392b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        body.dark .error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        /* Список записей */
+        .record {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        body.dark .record {
+            background: #2a2732;
+        }
+
+        .record-roll {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .record-warranty {
+            font-size: 14px;
+            color: #c9a84c;
+            margin-top: 2px;
+        }
+
+        .record-date {
+            font-size: 12px;
+            color: #b5aba1;
+            margin-top: 4px;
+        }
+
+        .record-status {
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .status-ok {
+            color: #27ae60;
+        }
+
+        .status-expired {
+            color: #c0392b;
+        }
+
+        /* Ссылки переключения */
+        .switch-link {
+            text-align: center;
+            margin-top: 16px;
+            color: #c9a84c;
+            cursor: pointer;
+        }
+
+        .switch-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Кнопка выхода */
+        .logout-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #c0392b;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .header-sub {
+            font-size: 14px;
+            color: #6b6359;
+        }
+
+        body.dark .header-sub {
+            color: #b5aba1;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flex-1 {
+            flex: 1;
+        }
+
+        .scan-btn {
+            padding: 14px 16px;
+            border: none;
+            border-radius: 12px;
+            background: #c9a84c;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .warranty-info {
+            background: #f0ece6;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        body.dark .warranty-info {
+            background: #2a2732;
+        }
+
+        .warranty-name {
+            font-weight: 600;
+        }
+
+        .warranty-days {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .warranty-ok {
+            color: #27ae60;
+        }
+
+        .warranty-expired {
+            color: #c0392b;
+        }
+
+        .warranty-date {
+            font-size: 12px;
+            color: #6b6359;
+        }
+
+        /* Админ-статистика */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #f0ece6;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        body.dark .stats {
+            background: #2a2732;
+        }
+
+        .stats-item {
+            text-align: center;
+        }
+
+        .stats-number {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .stats-label {
+            font-size: 12px;
+            color: #6b6359;
+        }
+
+        body.dark .stats-label {
+            color: #b5aba1;
+        }
+
+        /* Админ-список пользователей */
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e8e0d8;
+        }
+
+        body.dark .user-item {
+            border-bottom-color: #2a2732;
+        }
+
+        /* Стили для модалки QR-сканера */
+        #scannerModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #scannerModal.active {
+            display: flex;
+        }
+
+        #scannerModal .close {
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            color: #fff;
+            font-size: 30px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.2);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 24px;
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .scanner-hint {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .admin-hint {
+            margin-top: 12px;
+            padding: 10px;
+            background: rgba(201, 168, 76, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+            color: #6b6359;
+        }
+
+        body.dark .admin-hint {
+            background: rgba(201, 168, 76, 0.15);
+            color: #b5aba1;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 12px; padding-top: 30px; }
+            .card { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <!-- ========== ЭКРАН АВТОРИЗАЦИИ ========== -->
+        <div id="authScreen">
+            <div class="logo">
+                <span class="logo-icon">ZR</span>
+                <span class="logo-text">KAZAKHSTAN</span>
+                <span class="logo-sub">Гарантия качества</span>
+            </div>
+            <div class="card">
+                <div class="card-title" id="authTitle">🔐 Авторизация</div>
+                <div id="authError" class="error hidden"></div>
+                <input class="input" id="loginInput" placeholder="Логин" autocomplete="username">
+                <input class="input" id="passwordInput" placeholder="Пароль" type="password" autocomplete="current-password">
+                <div id="confirmPasswordGroup" class="hidden">
+                    <input class="input" id="confirmPasswordInput" placeholder="Подтвердите пароль" type="password">
+                </div>
+                <button class="btn" id="authBtn">Войти</button>
+                <div class="switch-link" id="switchAuthLink">Нет аккаунта? Зарегистрироваться</div>
+                <div class="admin-hint">👑 Админ: admin / admin123</div>
+            </div>
+        </div>
+
+        <!-- ========== ЭКРАН ПОЛЬЗОВАТЕЛЯ ========== -->
+        <div id="userScreen" class="hidden">
+            <div class="header">
+                <div>
+                    <div class="header-title">📦 Архив плёнок</div>
+                    <div class="header-sub" id="userNameDisplay">👤 пользователь</div>
+                </div>
+                <button class="logout-btn" id="userLogoutBtn">🚪</button>
+            </div>
+
+            <div class="card">
+                <div class="flex">
+                    <input class="input flex-1" id="rollInput" placeholder="Номер рулона">
+                    <button class="scan-btn" id="scanBtn">📷</button>
+                </div>
+                <input class="input" id="warrantyInput" placeholder="Номер гарантийного талона">
+                <div id="userError" class="error hidden"></div>
+                <div id="warrantyInfoContainer" class="hidden warranty-info">
+                    <div class="warranty-name" id="warrantyName"></div>
+                    <div class="warranty-days" id="warrantyDays"></div>
+                    <div class="warranty-date" id="warrantyEndDate"></div>
+                </div>
+                <button class="btn" id="addRecordBtn">➕ Добавить плёнку</button>
+            </div>
+
+            <div style="font-weight:600; margin: 16px 0 10px;">📜 Мои плёнки (<span id="userCount">0</span>)</div>
+            <div id="userRecords"></div>
+        </div>
+
+        <!-- ========== ЭКРАН АДМИНА ========== -->
+        <div id="adminScreen" class="hidden">
+            <div class="header">
+                <div>
+                    <div class="header-title">👑 Админ-панель</div>
+                    <div class="header-sub">ZR Kazakhstan — Управление</div>
+                </div>
+                <button class="logout-btn" id="adminLogoutBtn">🚪</button>
+            </div>
+
+            <div class="stats" id="adminStats">
+                <div class="stats-item">
+                    <div class="stats-number" id="statUsers">0</div>
+                    <div class="stats-label">👥 пользователей</div>
+                </div>
+                <div class="stats-item">
+                    <div class="stats-number" id="statFilms">0</div>
+                    <div class="stats-label">🎞️ регистраций</div>
+                </div>
+                <div class="stats-item">
+                    <div class="stats-number" id="statCatalog">0</div>
+                    <div class="stats-label">📦 рулонов</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="font-weight:600; margin-bottom:12px;">📦 Добавить рулон в справочник</div>
+                <input class="input" id="adminNewRoll" placeholder="Номер рулона (ZR-XXXX)">
+                <input class="input" id="adminNewName" placeholder="Название модели">
+                <input class="input" id="adminNewEndDate" placeholder="Дата окончания (2026-12-31)">
+                <button class="btn btn-success" id="adminAddCatalogBtn">➕ Добавить в справочник</button>
+            </div>
+
+            <div style="font-weight:600; margin:16px 0 10px;">📋 Справочник рулонов (<span id="catalogCount">0</span>)</div>
+            <div id="adminCatalogList"></div>
+
+            <div style="font-weight:600; margin:16px 0 10px;">👥 Все пользователи</div>
+            <div id="adminUserList"></div>
+
+            <div style="font-weight:600; margin:16px 0 10px;">🎞️ Все регистрации (<span id="adminFilmCount">0</span>)</div>
+            <input class="input" id="adminSearch" placeholder="🔍 Поиск по рулону или пользователю">
+            <div id="adminAllRecords"></div>
+        </div>
+
+        <!-- ========== QR-СКАНЕР ========== -->
+        <div id="scannerModal">
+            <video id="video" autoplay playsinline></video>
+            <button class="close" id="closeScannerBtn">✕</button>
+            <div class="scanner-hint">Наведите камеру на QR-код рулона</div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ
+        // ============================================
+
+        // ----- Состояние -----
+        const state = {
+            isLoggedIn: false,
+            isAdmin: false,
+            currentUser: '',
+            users: {},
+            films: [],
+            catalog: [],
+            isRegister: false,
+        };
+
+        // ----- DOM-элементы -----
+        const $ = (id) => document.getElementById(id);
+        const $$ = (sel) => document.querySelectorAll(sel);
+
+        const authScreen = $('authScreen');
+        const userScreen = $('userScreen');
+        const adminScreen = $('adminScreen');
+        const authTitle = $('authTitle');
+        const authError = $('authError');
+        const loginInput = $('loginInput');
+        const passwordInput = $('passwordInput');
+        const confirmPasswordGroup = $('confirmPasswordGroup');
+        const confirmPasswordInput = $('confirmPasswordInput');
+        const authBtn = $('authBtn');
+        const switchAuthLink = $('switchAuthLink');
+
+        const userNameDisplay = $('userNameDisplay');
+        const userLogoutBtn = $('userLogoutBtn');
+        const rollInput = $('rollInput');
+        const warrantyInput = $('warrantyInput');
+        const userError = $('userError');
+        const warrantyInfoContainer = $('warrantyInfoContainer');
+        const warrantyName = $('warrantyName');
+        const warrantyDays = $('warrantyDays');
+        const warrantyEndDate = $('warrantyEndDate');
+        const addRecordBtn = $('addRecordBtn');
+        const userCount = $('userCount');
+        const userRecords = $('userRecords');
+
+        const adminLogoutBtn = $('adminLogoutBtn');
+        const statUsers = $('statUsers');
+        const statFilms = $('statFilms');
+        const statCatalog = $('statCatalog');
+        const adminNewRoll = $('adminNewRoll');
+        const adminNewName = $('adminNewName');
+        const adminNewEndDate = $('adminNewEndDate');
+        const adminAddCatalogBtn = $('adminAddCatalogBtn');
+        const catalogCount = $('catalogCount');
+        const adminCatalogList = $('adminCatalogList');
+        const adminUserList = $('adminUserList');
+        const adminFilmCount = $('adminFilmCount');
+        const adminSearch = $('adminSearch');
+        const adminAllRecords = $('adminAllRecords');
+
+        const scanBtn = $('scanBtn');
+        const scannerModal = $('scannerModal');
+        const closeScannerBtn = $('closeScannerBtn');
+        const video = $('video');
+
+        // ----- Загрузка данных -----
+        function loadData() {
+            try {
+                const savedUsers = localStorage.getItem('zr_users');
+                if (savedUsers) state.users = JSON.parse(savedUsers);
+
+                const savedFilms = localStorage.getItem('zr_films');
+                if (savedFilms) state.films = JSON.parse(savedFilms);
+
+                const savedCatalog = localStorage.getItem('zr_catalog');
+                if (savedCatalog) state.catalog = JSON.parse(savedCatalog);
+
+                const savedSession = localStorage.getItem('zr_session');
+                if (savedSession) {
+                    const session = JSON.parse(savedSession);
+                    state.isLoggedIn = true;
+                    state.isAdmin = session.isAdmin || false;
+                    state.currentUser = session.username || '';
+                    if (state.isAdmin) showAdminScreen();
+                    else showUserScreen();
+                }
+            } catch (e) {
+                console.log('Ошибка загрузки', e);
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem('zr_users', JSON.stringify(state.users));
+                localStorage.setItem('zr_films', JSON.stringify(state.films));
+                localStorage.setItem('zr_catalog', JSON.stringify(state.catalog));
+            } catch (e) {
+                console.log('Ошибка сохранения', e);
+            }
+        }
+
+        function saveSession() {
+            if (state.isLoggedIn) {
+                localStorage.setItem('zr_session', JSON.stringify({
+                    username: state.currentUser,
+                    isAdmin: state.isAdmin
+                }));
+            } else {
+                localStorage.removeItem('zr_session');
+            }
+        }
+
+        // ----- Показать экраны -----
+        function showAuthScreen() {
+            authScreen.classList.remove('hidden');
+            userScreen.classList.add('hidden');
+            adminScreen.classList.add('hidden');
+        }
+
+        function showUserScreen() {
+            authScreen.classList.add('hidden');
+            userScreen.classList.remove('hidden');
+            adminScreen.classList.add('hidden');
+            userNameDisplay.textContent = '👤 ' + state.currentUser;
+            renderUserRecords();
+        }
+
+        function showAdminScreen() {
+            authScreen.classList.add('hidden');
+            userScreen.classList.add('hidden');
+            adminScreen.classList.remove('hidden');
+            renderAdminPanel();
+        }
+
+        // ----- Авторизация -----
+        function handleAuth() {
+            const login = loginInput.value.trim();
+            const password = passwordInput.value.trim();
+            authError.classList.add('hidden');
+
+            if (!login || !password) {
+                showError(authError, '❌ Заполните все поля');
+                return;
+            }
+
+            if (state.isRegister) {
+                const confirm = confirmPasswordInput.value.trim();
+                if (password !== confirm) {
+                    showError(authError, '❌ Пароли не совпадают');
+                    return;
+                }
+                if (password.length < 4) {
+                    showError(authError, '❌ Пароль должен быть минимум 4 символа');
+                    return;
+                }
+                if (state.users[login]) {
+                    showError(authError, '❌ Пользователь уже существует');
+                    return;
+                }
+                state.users[login] = password;
+                saveData();
+                alert('✅ Регистрация прошла успешно! Теперь войдите.');
+                toggleAuthMode();
+                return;
+            }
+
+            // Вход
+            if (login === 'admin' && password === 'admin123') {
+                state.isLoggedIn = true;
+                state.isAdmin = true;
+                state.currentUser = 'admin';
+                saveSession();
+                showAdminScreen();
+                return;
+            }
+
+            if (state.users[login]) {
+                if (state.users[login] === password) {
+                    state.isLoggedIn = true;
+                    state.isAdmin = false;
+                    state.currentUser = login;
+                    saveSession();
+                    showUserScreen();
+                    return;
+                } else {
+                    showError(authError, '❌ Неверный пароль');
+                    return;
+                }
+            } else {
+                showError(authError, '❌ Пользователь не найден');
+            }
+        }
+
+        function toggleAuthMode() {
+            state.isRegister = !state.isRegister;
+            authTitle.textContent = state.isRegister ? '📝 Регистрация' : '🔐 Авторизация';
+            authBtn.textContent = state.isRegister ? 'Зарегистрироваться' : 'Войти';
+            switchAuthLink.textContent = state.isRegister ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться';
+            confirmPasswordGroup.classList.toggle('hidden');
+            authError.classList.add('hidden');
+            loginInput.value = '';
+            passwordInput.value = '';
+            confirmPasswordInput.value = '';
+        }
+
+        function showError(el, msg) {
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+
+        // ----- Пользователь: добавление записи -----
+        function handleAddRecord() {
+            const roll = rollInput.value.trim();
+            const warranty = warrantyInput.value.trim();
+            userError.classList.add('hidden');
+            warrantyInfoContainer.classList.add('hidden');
+
+            if (!roll || !warranty) {
+                showError(userError, '❌ Заполните все поля');
+                return;
+            }
+
+            const catalogItem = state.catalog.find(c => c.roll === roll);
+            if (!catalogItem) {
+                showError(userError, '❌ Рулон не найден в системе ZR Kazakhstan');
+                return;
+            }
+
+            const existing = state.films.find(f => f.roll === roll);
+            if (existing) {
+                showError(userError, '❌ Рулон уже зарегистрирован пользователем: ' + existing.user);
+                return;
+            }
+
+            const newRecord = {
+                id: Date.now().toString(),
+                roll: roll,
+                warranty: warranty,
+                date: new Date().toLocaleDateString('ru-RU'),
+                user: state.currentUser,
+                endDate: catalogItem.endDate,
+            };
+
+            state.films = [newRecord, ...state.films];
+            saveData();
+            rollInput.value = '';
+            warrantyInput.value = '';
+            renderUserRecords();
+
+            const info = getWarrantyInfo(roll);
+            if (info && info.daysLeft > 0) {
+                alert('✅ Готово!\nГарантия действует ещё ' + info.daysLeft + ' дней.');
+            } else if (info && info.daysLeft <= 0) {
+                alert('⚠️ Внимание!\nГарантия на этот рулон истекла.');
+            } else {
+                alert('✅ Готово! Плёнка добавлена в архив.');
+            }
+        }
+
+        function getWarrantyInfo(roll) {
+            const item = state.catalog.find(c => c.roll === roll);
+            if (!item) return null;
+            const endDate = new Date(item.endDate);
+            const now = new Date();
+            const diff = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+            return { ...item, daysLeft: diff, isExpired: diff < 0 };
+        }
+
+        function checkWarranty() {
+            const roll = rollInput.value.trim();
+            warrantyInfoContainer.classList.add('hidden');
+            if (!roll) return;
+
+            const info = getWarrantyInfo(roll);
+            if (!info) return;
+
+            warrantyName.textContent = '📅 ' + info.name;
+            const color = info.isExpired ? 'warranty-expired' : 'warranty-ok';
+            warrantyDays.textContent = info.isExpired ? '⏰ Гарантия истекла' : '⏳ Осталось ' + info.daysLeft + ' дней';
+            warrantyDays.className = 'warranty-days ' + color;
+            warrantyEndDate.textContent = 'До: ' + new Date(info.endDate).toLocaleDateString('ru-RU');
+            warrantyInfoContainer.classList.remove('hidden');
+        }
+
+        function renderUserRecords() {
+            const userFilms = state.films.filter(f => f.user === state.currentUser);
+            userCount.textContent = userFilms.length;
+
+            if (userFilms.length === 0) {
+                userRecords.innerHTML = '<div style="color:#b5aba1; text-align:center; margin-top:20px;">Нет добавленных плёнок</div>';
+                return;
+            }
+
+            userRecords.innerHTML = userFilms.map(item => {
+                const info = getWarrantyInfo(item.roll);
+                const status = info ? (info.isExpired ? '⏰ Истекла' : '✅ ' + info.daysLeft + ' дней') : '';
+                const statusClass = info && info.isExpired ? 'status-expired' : 'status-ok';
+                return `
+                    <div class="record">
+                        <div class="record-roll">🎯 ${item.roll}</div>
+                        <div class="record-warranty">🛡️ ${item.warranty}</div>
+                        <div class="record-date">📅 ${item.date}</div>
+                        ${status ? `<div class="record-status ${statusClass}">${status}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ----- Админ -----
+        function renderAdminPanel() {
+            const userList = Object.keys(state.users);
+            statUsers.textContent = userList.length;
+            statFilms.textContent = state.films.length;
+            statCatalog.textContent = state.catalog.length;
+            adminFilmCount.textContent = state.films.length;
+            catalogCount.textContent = state.catalog.length;
+
+            // Список пользователей
+            const filmStats = {};
+            userList.forEach(u => {
+                filmStats[u] = state.films.filter(f => f.user === u).length;
+            });
+            adminUserList.innerHTML = userList.length === 0 ?
+                '<div style="color:#b5aba1; text-align:center; margin-top:10px;">Нет пользователей</div>' :
+                userList.map(u => `
+                    <div class="user-item">
+                        <span>👤 ${u}</span>
+                        <span style="color:#c9a84c;">📦 ${filmStats[u] || 0} плёнок</span>
+                    </div>
+                `).join('');
+
+            // Справочник
+            renderCatalog();
+
+            // Все записи
+            renderAdminRecords('');
+        }
+
+        function renderCatalog() {
+            catalogCount.textContent = state.catalog.length;
+            if (state.catalog.length === 0) {
+                adminCatalogList.innerHTML = '<div style="color:#b5aba1; text-align:center; margin-top:10px;">Справочник пуст</div>';
+                return;
+            }
+            adminCatalogList.innerHTML = state.catalog.map(item => `
+                <div class="user-item">
+                    <div>
+                        <div>📦 ${item.roll}</div>
+                        <div style="font-size:13px; color:#6b6359;">${item.name}</div>
+                        <div style="font-size:12px; color:#b5aba1;">До ${new Date(item.endDate).toLocaleDateString('ru-RU')}</div>
+                    </div>
+                    <button onclick="deleteCatalogItem('${item.roll}')" style="background:none; border:none; font-size:20px; cursor:pointer;">🗑️</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteCatalogItem(roll) {
+            if (confirm('Удалить рулон ' + roll + '?')) {
+                state.catalog = state.catalog.filter(c => c.roll !== roll);
+                saveData();
+                renderAdminPanel();
+            }
+        }
+
+        function handleAddCatalogItem() {
+            const roll = adminNewRoll.value.trim();
+            const name = adminNewName.value.trim();
+            const endDate = adminNewEndDate.value.trim();
+
+            if (!roll || !name || !endDate) {
+                alert('❌ Заполните все поля');
+                return;
+            }
+
+            if (state.catalog.find(c => c.roll === roll)) {
+                alert('❌ Рулон уже есть в каталоге');
+                return;
+            }
+
+            state.catalog.push({ roll, name, endDate });
+            saveData();
+            adminNewRoll.value = '';
+            adminNewName.value = '';
+            adminNewEndDate.value = '';
+            renderAdminPanel();
+            alert('✅ Рулон добавлен в справочник');
+        }
+
+        function renderAdminRecords(search) {
+            const query = search.toLowerCase();
+            const filtered = state.films.filter(f =>
+                f.roll.toLowerCase().includes(query) ||
+                f.user.toLowerCase().includes(query)
+            );
+            adminFilmCount.textContent = state.films.length;
+
+            if (filtered.length === 0) {
+                adminAllRecords.innerHTML = '<div style="color:#b5aba1; text-align:center; margin-top:20px;">Нет записей</div>';
+                return;
+            }
+
+            adminAllRecords.innerHTML = filtered.map(item => {
+                const info = state.catalog.find(c => c.roll === item.roll);
+                return `
+                    <div class="record">
+                        <div class="record-roll">🎯 ${item.roll}</div>
+                        <div class="record-warranty">🛡️ ${item.warranty}</div>
+                        <div class="record-date">👤 ${item.user} | 📅 ${item.date}</div>
+                        ${info ? `<div class="record-date">📅 До ${new Date(info.endDate).toLocaleDateString('ru-RU')}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ----- QR-сканер -----
+        let stream = null;
+
+        async function startScanner() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+                video.srcObject = stream;
+                await video.play();
+                scannerModal.classList.add('active');
+                scanCode();
+            } catch (err) {
+                alert('❌ Нет доступа к камере');
+                console.log(err);
+            }
+        }
+
+        function stopScanner() {
+            if (stream) {
+                stream.getTracks().forEach(t => t.stop());
+                stream = null;
+            }
+            video.srcObject = null;
+            scannerModal.classList.remove('active');
+        }
+
+        function scanCode() {
+            if (!scannerModal.classList.contains('active')) return;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            // Простой поиск QR-кода (имитация)
+            // В реальном приложении используйте библиотеку jsQR
+            // Для простоты мы просто ищем текст в изображении (демо-режим)
+            // В реальном приложении замените на jsQR
+
+            setTimeout(() => {
+                if (scannerModal.classList.contains('active')) {
+                    // Демо: имитация сканирования
+                    // В реальном приложении здесь будет jsQR
+                    scanCode();
+                }
+            }, 500);
+        }
+
+        // Временная заглушка для QR-сканера
+        // В реальном приложении используйте библиотеку jsQR
+        // Для демонстрации мы просто просим ввести номер вручную
+
+        // ----- Выход -----
+        function logout() {
+            state.isLoggedIn = false;
+            state.isAdmin = false;
+            state.currentUser = '';
+            localStorage.removeItem('zr_session');
+            showAuthScreen();
+            loginInput.value = '';
+            passwordInput.value = '';
+        }
+
+        // ----- Инициализация -----
+        function init() {
+            loadData();
+
+            // Авторизация
+            authBtn.addEventListener('click', handleAuth);
+            switchAuthLink.addEventListener('click', toggleAuthMode);
+            loginInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
+            passwordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
+            confirmPasswordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
+
+            // Пользователь
+            addRecordBtn.addEventListener('click', handleAddRecord);
+            userLogoutBtn.addEventListener('click', logout);
+            rollInput.addEventListener('input', checkWarranty);
+
+            // QR-сканер
+            scanBtn.addEventListener('click', startScanner);
+            closeScannerBtn.addEventListener('click', stopScanner);
+
+            // Админ
+            adminLogoutBtn.addEventListener('click', logout);
+            adminAddCatalogBtn.addEventListener('click', handleAddCatalogItem);
+            adminSearch.addEventListener('input', (e) => renderAdminRecords(e.target.value));
+
+            // Вход на главную
+            if (state.isLoggedIn) {
+                if (state.isAdmin) showAdminScreen();
+                else showUserScreen();
+            } else {
+                showAuthScreen();
+            }
+
+            // Экспорт функций для HTML
+            window.deleteCatalogItem = deleteCatalogItem;
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

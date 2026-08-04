@@ -2,322 +2,1816 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>ZR Kazakhstan</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ZR Kazakhstan">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
+    <title>ZR Kazakhstan — Гарантия</title>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- QR-библиотеки -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background: #f5f0eb; color: #2d2a24; min-height: 100vh; padding: 16px; }
-        .container { max-width: 500px; margin: 0 auto; }
-        .card { background: #fff; border-radius: 20px; padding: 24px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-        .logo { text-align: center; margin-bottom: 20px; }
-        .logo-text { font-size: 24px; font-weight: 700; color: #c9a84c; letter-spacing: 3px; }
-        .logo-sub { font-size: 13px; color: #888; letter-spacing: 2px; }
-        .card-title { font-size: 20px; font-weight: 600; margin-bottom: 16px; text-align: center; }
-        .input { width: 100%; padding: 14px 16px; border: 2px solid #e8e0d8; border-radius: 12px; background: #f8f5f0; font-size: 16px; margin-bottom: 12px; outline: none; }
-        .input:focus { border-color: #c9a84c; }
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 18px; font-weight: 600; color: #fff; background: #c9a84c; cursor: pointer; margin-bottom: 8px; }
-        .btn-danger { background: #e74c3c; }
-        .btn-secondary { background: transparent; color: #c9a84c; border: 2px solid #c9a84c; }
-        .error { background: rgba(231,76,60,0.1); color: #e74c3c; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
-        .success { background: rgba(39,174,96,0.1); color: #27ae60; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
-        .hidden { display: none; }
-        .switch-link { text-align: center; margin-top: 16px; color: #c9a84c; cursor: pointer; font-weight: 500; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .header-title { font-size: 20px; font-weight: bold; }
-        .header-sub { font-size: 14px; color: #888; }
-        .logout-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: #e74c3c; color: #fff; font-size: 18px; cursor: pointer; }
-        .record { background: #f8f5f0; border-radius: 12px; padding: 14px; margin-bottom: 10px; border-left: 4px solid #c9a84c; }
-        .record-roll { font-size: 16px; font-weight: 600; }
-        .record-warranty { font-size: 14px; color: #c9a84c; margin-top: 2px; }
-        .record-date { font-size: 12px; color: #888; margin-top: 4px; }
-        .flex { display: flex; gap: 10px; align-items: center; }
-        .flex-1 { flex: 1; }
-        .scan-btn { width: auto; padding: 14px 16px; border: none; border-radius: 12px; background: #c9a84c; color: #fff; font-size: 20px; cursor: pointer; }
-        .phone-prefix { display: inline-block; margin-right: 8px; font-weight: 600; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: #f5f0eb;
+            color: #2d2a24;
+            min-height: 100vh;
+            padding: 16px;
+            transition: background 0.3s, color 0.3s;
+        }
         @media (prefers-color-scheme: dark) {
-            body { background: #0a0a12; color: #e8e4de; }
-            .card { background: #16161f; }
-            .input { background: #222233; color: #e8e4de; border-color: #333355; }
-            .input:focus { border-color: #c9a84c; }
-            .record { background: #1a1a2e; }
+            body {
+                background: #0a0a12;
+                color: #e8e4de;
+            }
+            .card {
+                background: #16161f !important;
+                box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4) !important;
+            }
+            .input {
+                background: #222233 !important;
+                color: #e8e4de !important;
+                border-color: #333355 !important;
+            }
+            .input:focus {
+                border-color: #c9a84c !important;
+                box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.15) !important;
+            }
+            .input::placeholder {
+                color: #666688 !important;
+            }
+            .record {
+                background: #1a1a2e !important;
+            }
+            .stats {
+                background: #1a1a2e !important;
+            }
+            .user-item {
+                border-bottom-color: #2a2a40 !important;
+            }
+            .profile-avatar {
+                border-color: #333355 !important;
+            }
+            .header-sub {
+                color: #8888aa !important;
+            }
+            .stats-label {
+                color: #8888aa !important;
+            }
+            .tab-button {
+                color: #8888aa !important;
+            }
+            .tab-button.active {
+                color: #c9a84c !important;
+                border-bottom-color: #c9a84c !important;
+            }
+            .qr-modal-content {
+                background: #16161f !important;
+            }
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            width: 100px;
+            height: auto;
+            border-radius: 50%;
+            box-shadow: 0 4px 20px rgba(201, 168, 76, 0.2);
+        }
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #c9a84c;
+            letter-spacing: 4px;
+            margin-top: 8px;
+            display: block;
+        }
+        .logo-sub {
+            font-size: 13px;
+            color: #8888aa;
+            letter-spacing: 2px;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e8e0d8;
+            border-radius: 12px;
+            background: #f8f5f0;
+            font-size: 16px;
+            margin-bottom: 12px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .input:focus {
+            border-color: #c9a84c;
+            box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.1);
+        }
+        .input::placeholder {
+            color: #bbb;
+        }
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            background: #c9a84c;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+        }
+        .btn:hover {
+            transform: scale(1.01);
+            opacity: 0.9;
+        }
+        .btn-danger {
+            background: #e74c3c;
+        }
+        .btn-success {
+            background: #27ae60;
+        }
+        .btn-secondary {
+            background: transparent;
+            color: #c9a84c;
+            border: 2px solid #c9a84c;
+        }
+        .btn-secondary:hover {
+            background: #c9a84c;
+            color: #fff;
+        }
+        .btn-sm {
+            padding: 10px 16px;
+            font-size: 14px;
+            width: auto;
+            display: inline-block;
+        }
+        .btn-qr {
+            background: #6c5ce7;
+        }
+        .btn-qr:hover {
+            background: #5a4bd1;
+        }
+        .btn-whatsapp {
+            background: #25D366;
+        }
+        .btn-whatsapp:hover {
+            background: #1da851;
+        }
+        .error {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .success {
+            background: rgba(39, 174, 96, 0.1);
+            color: #27ae60;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .record {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border-left: 4px solid #c9a84c;
+            transition: background 0.3s;
+        }
+        .record-roll {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .record-warranty {
+            font-size: 14px;
+            color: #c9a84c;
+            margin-top: 2px;
+        }
+        .record-date {
+            font-size: 12px;
+            color: #8888aa;
+            margin-top: 4px;
+        }
+        .record-status {
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .status-ok {
+            color: #27ae60;
+        }
+        .status-expired {
+            color: #e74c3c;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        @media (prefers-color-scheme: dark) {
+            .header {
+                background: rgba(22, 22, 31, 0.8);
+            }
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .header-sub {
+            font-size: 13px;
+            color: #8888aa;
+        }
+        .logout-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #e74c3c;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .profile-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid #c9a84c;
+            object-fit: cover;
+            background: #e8e0d8;
+            cursor: pointer;
+        }
+        .profile-info {
+            flex: 1;
+        }
+        .profile-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .profile-email {
+            font-size: 14px;
+            color: #8888aa;
+        }
+        .profile-stats {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+        .profile-stat {
+            text-align: center;
+        }
+        .profile-stat-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: #c9a84c;
+        }
+        .profile-stat-label {
+            font-size: 11px;
+            color: #8888aa;
+        }
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e8e0d8;
+            overflow-x: auto;
+        }
+        .tab-button {
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            color: #8888aa;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .tab-button.active {
+            color: #c9a84c;
+            border-bottom-color: #c9a84c;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .switch-link {
+            text-align: center;
+            margin-top: 16px;
+            color: #c9a84c;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .switch-link:hover {
+            text-decoration: underline;
+        }
+        .qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .qr-modal.active {
+            display: flex;
+        }
+        .qr-modal-content {
+            background: #fff;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .qr-modal-content .qr-code {
+            display: flex;
+            justify-content: center;
+            margin: 16px 0;
+            padding: 16px;
+            background: #fff;
+            border-radius: 12px;
+        }
+        .qr-modal-content .qr-code canvas,
+        .qr-modal-content .qr-code img {
+            width: 200px !important;
+            height: 200px !important;
+        }
+        .qr-modal-content .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .qr-modal-content .btn-group .btn {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e8e0d8;
+            transition: border-color 0.3s;
+        }
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        .user-item .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-item .user-name {
+            font-weight: 500;
+        }
+        .user-item .user-email {
+            font-size: 12px;
+            color: #8888aa;
+        }
+        .user-item .user-status {
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 20px;
+            background: #27ae60;
+            color: #fff;
+        }
+        .user-item .user-status.blocked {
+            background: #e74c3c;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #f0ece6;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            transition: background 0.3s;
+        }
+        .stats-item {
+            text-align: center;
+        }
+        .stats-number {
+            font-size: 22px;
+            font-weight: bold;
+            color: #c9a84c;
+        }
+        .stats-label {
+            font-size: 11px;
+            color: #8888aa;
+        }
+        #scannerModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #scannerModal.active {
+            display: flex;
+        }
+        #qr-reader {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            min-height: 400px;
+        }
+        #scannerResult {
+            color: #fff;
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            padding: 0 20px;
+        }
+        #closeScannerBtn {
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .scanner-hint {
+            position: absolute;
+            bottom: 80px;
+            color: #fff;
+            opacity: 0.6;
+            font-size: 14px;
+        }
+        .flex {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .flex-1 {
+            flex: 1;
+        }
+        .scan-btn {
+            padding: 14px 16px;
+            border: none;
+            border-radius: 12px;
+            background: #c9a84c;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .forgot-link {
+            text-align: right;
+            margin-top: -8px;
+            margin-bottom: 12px;
+        }
+        .forgot-link a {
+            color: #8888aa;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .forgot-link a:hover {
+            color: #c9a84c;
+            text-decoration: underline;
+        }
+        .phone-wrapper {
+            position: relative;
+        }
+        .phone-prefix {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d2a24;
+            pointer-events: none;
+        }
+        @media (prefers-color-scheme: dark) {
+            .phone-prefix {
+                color: #e8e4de;
+            }
+        }
+        .input-phone {
+            padding-left: 48px;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 12px;
+            }
+            .card {
+                padding: 16px;
+            }
+            .header {
+                padding: 10px 12px;
+            }
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-stats {
+                justify-content: center;
+            }
+            .tabs {
+                gap: 4px;
+            }
+            .tab-button {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            .qr-modal-content {
+                padding: 20px;
+            }
+            .qr-modal-content .qr-code canvas,
+            .qr-modal-content .qr-code img {
+                width: 150px !important;
+                height: 150px !important;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Логотип -->
-        <div class="logo">
-            <div class="logo-text">🏭 ZR KAZAKHSTAN</div>
-            <div class="logo-sub">Гарантия качества</div>
-        </div>
-
-        <!-- ===== ЭКРАН ВХОДА ===== -->
+    <div class="container" id="app">
+        <!-- ========== ЭКРАН АВТОРИЗАЦИИ ========== -->
         <div id="authScreen">
-            <div class="card">
+            <div class="logo">
+                <img src="https://i.ibb.co.com/ynzbM3k4/77.jpg" alt="ZR Kazakhstan Logo">
+                <span class="logo-text">KAZAKHSTAN</span>
+                <span class="logo-sub">Гарантия качества</span>
+            </div>
+            <div class="card fade-in">
                 <div class="card-title" id="authTitle">🔐 Авторизация</div>
                 <div id="authError" class="error hidden"></div>
                 <div id="authSuccess" class="success hidden"></div>
                 <input class="input" id="loginInput" placeholder="Логин (минимум 6 символов)">
-                <input class="input" id="passwordInput" placeholder="Пароль" type="password">
-                <div id="registerFields" class="hidden">
+                <input class="input" id="passwordInput" placeholder="Пароль (заглавная, цифры, 8+ символов)" type="password">
+                <div id="confirmPasswordGroup" class="hidden">
                     <input class="input" id="confirmPasswordInput" placeholder="Подтвердите пароль" type="password">
-                    <div>
+                    <div class="phone-wrapper">
                         <span class="phone-prefix">+7</span>
-                        <input class="input" id="phoneInput" placeholder="7001234567" type="tel" style="display:inline-block; width:calc(100% - 40px);">
+                        <input class="input input-phone" id="phoneInput" placeholder="7001234567" type="tel" maxlength="10">
                     </div>
                 </div>
+                <div class="forgot-link">
+                    <a id="forgotPasswordLink">Забыли пароль? Обратитесь к администратору</a>
+                </div>
                 <button class="btn" id="authBtn">Войти</button>
-                <div class="switch-link" id="switchLink">Нет аккаунта? Зарегистрироваться</div>
-                <div style="text-align:center; margin-top:12px; font-size:13px; color:#888;">Админ: admin / admin123</div>
+                <div class="switch-link" id="switchAuthLink">Нет аккаунта? Зарегистрироваться</div>
             </div>
         </div>
 
-        <!-- ===== ЭКРАН ПОЛЬЗОВАТЕЛЯ ===== -->
+        <!-- ========== ЭКРАН ПОЛЬЗОВАТЕЛЯ ========== -->
         <div id="userScreen" class="hidden">
-            <div class="card">
-                <div class="header">
-                    <div>
-                        <div class="header-title">📦 Архив плёнок</div>
-                        <div class="header-sub" id="userNameDisplay">👤 пользователь</div>
-                    </div>
-                    <button class="logout-btn" id="logoutBtn">🚪</button>
+            <div class="header">
+                <div>
+                    <div class="header-title">📦 Архив плёнок</div>
+                    <div class="header-sub" id="userNameDisplay">👤 пользователь</div>
                 </div>
-                <div class="flex">
-                    <input class="input flex-1" id="rollInput" placeholder="Номер рулона">
-                    <button class="scan-btn" id="scanBtn">📷</button>
-                </div>
-                <input class="input" id="warrantyInput" placeholder="Номер гарантийного талона">
-                <div id="userError" class="error hidden"></div>
-                <button class="btn" id="addRecordBtn">➕ Добавить плёнку</button>
+                <button class="logout-btn" id="userLogoutBtn">🚪</button>
             </div>
-            <div style="font-weight:600; margin: 16px 0 10px;">📜 Мои плёнки (<span id="userCount">0</span>)</div>
-            <div id="userRecords"></div>
+
+            <div class="tabs">
+                <button class="tab-button active" data-tab="tabRecords">📋 Записи</button>
+                <button class="tab-button" data-tab="tabProfile">👤 Профиль</button>
+            </div>
+
+            <div id="tabRecords" class="tab-content active">
+                <div class="card">
+                    <div class="flex">
+                        <input class="input flex-1" id="rollInput" placeholder="Номер рулона">
+                        <button class="scan-btn" id="scanBtn">📷</button>
+                    </div>
+                    <input class="input" id="warrantyInput" placeholder="Номер гарантийного талона">
+                    <div id="userError" class="error hidden"></div>
+                    <div id="warrantyInfoContainer" class="hidden" style="background:#f0ece6; border-radius:12px; padding:12px; text-align:center; margin-bottom:12px;">
+                        <div class="warranty-name" id="warrantyName"></div>
+                        <div class="warranty-days" id="warrantyDays"></div>
+                        <div class="warranty-date" id="warrantyEndDate"></div>
+                    </div>
+                    <button class="btn" id="addRecordBtn">➕ Добавить плёнку</button>
+                </div>
+                <div style="font-weight:600; margin:16px 0 10px;">📜 Мои плёнки (<span id="userCount">0</span>)</div>
+                <div id="userRecords"></div>
+            </div>
+
+            <div id="tabProfile" class="tab-content">
+                <div class="card">
+                    <div class="profile-header">
+                        <img class="profile-avatar" id="profileAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23c9a84c'/%3E%3Ctext x='32' y='40' font-size='28' text-anchor='middle' fill='white' font-family='Arial'%3E👤%3C/text%3E%3C/svg%3E" alt="Avatar">
+                        <div class="profile-info">
+                            <div class="profile-name" id="profileName">Пользователь</div>
+                            <div class="profile-email" id="profileLogin">@username</div>
+                            <div class="profile-email" id="profilePhone">📱 +7 700 123 45 67</div>
+                        </div>
+                        <button class="btn btn-sm btn-secondary" id="changeAvatarBtn">🖼️ Изменить</button>
+                    </div>
+                    <div class="profile-stats">
+                        <div class="profile-stat"><div class="profile-stat-number" id="profileFilmsCount">0</div><div class="profile-stat-label">Плёнок</div></div>
+                        <div class="profile-stat"><div class="profile-stat-number" id="profileActiveWarranty">0</div><div class="profile-stat-label">Активных</div></div>
+                        <div class="profile-stat"><div class="profile-stat-number" id="profileExpiredWarranty">0</div><div class="profile-stat-label">Просрочено</div></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="font-weight:600; margin-bottom:8px;">📊 Моя статистика</div>
+                    <div id="profileActivityLog" style="font-size:13px; color:#8888aa; max-height:150px; overflow-y:auto;">Нет активности</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== ЭКРАН АДМИНА ========== -->
+        <div id="adminScreen" class="hidden">
+            <div class="header">
+                <div>
+                    <div class="header-title">👑 Админ-панель</div>
+                    <div class="header-sub">ZR Kazakhstan — Управление</div>
+                </div>
+                <button class="logout-btn" id="adminLogoutBtn">🚪</button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-button active" data-tab="adminDashboard">📊 Дашборд</button>
+                <button class="tab-button" data-tab="adminUsers">👥 Пользователи</button>
+                <button class="tab-button" data-tab="adminCatalog">📦 Рулоны</button>
+                <button class="tab-button" data-tab="adminLogs">📜 Логи</button>
+            </div>
+
+            <div id="adminDashboard" class="tab-content active">
+                <div class="stats" id="adminStats">
+                    <div class="stats-item"><div class="stats-number" id="statUsers">0</div><div class="stats-label">👥 пользователей</div></div>
+                    <div class="stats-item"><div class="stats-number" id="statFilms">0</div><div class="stats-label">🎞️ регистраций</div></div>
+                    <div class="stats-item"><div class="stats-number" id="statCatalog">0</div><div class="stats-label">📦 рулонов</div></div>
+                    <div class="stats-item"><div class="stats-number" id="statBlocked">0</div><div class="stats-label">🚫 заблокировано</div></div>
+                </div>
+                <div class="card">
+                    <div style="font-weight:600; margin-bottom:8px;">📈 Активность сегодня</div>
+                    <div id="adminActivitySummary" style="font-size:14px; color:#8888aa;"></div>
+                </div>
+                <button class="btn btn-success" id="exportCSVBtn">📥 Экспорт всех данных (CSV)</button>
+            </div>
+
+            <div id="adminUsers" class="tab-content">
+                <div class="card">
+                    <div style="font-weight:600; margin-bottom:12px;">👥 Управление пользователями</div>
+                    <div id="adminUserList"></div>
+                </div>
+            </div>
+
+            <div id="adminCatalog" class="tab-content">
+                <div class="card">
+                    <div style="font-weight:600; margin-bottom:12px;">📦 Добавить рулон в справочник</div>
+                    <input class="input" id="adminNewRoll" placeholder="Номер рулона (ZR-XXXX)">
+                    <input class="input" id="adminNewName" placeholder="Название модели">
+                    <input class="input" id="adminNewEndDate" placeholder="Дата окончания (2026-12-31)">
+                    <button class="btn btn-success" id="adminAddCatalogBtn">➕ Добавить в справочник</button>
+                </div>
+                <div style="font-weight:600; margin:16px 0 10px;">📋 Справочник рулонов (<span id="catalogCount">0</span>)</div>
+                <input class="input" id="adminCatalogSearch" placeholder="🔍 Поиск по рулону">
+                <div id="adminCatalogList"></div>
+            </div>
+
+            <div id="adminLogs" class="tab-content">
+                <div class="card">
+                    <div style="font-weight:600; margin-bottom:12px;">📜 Логи действий</div>
+                    <div id="adminLogsList" style="max-height:400px; overflow-y:auto; font-size:13px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== QR-СКАНЕР ========== -->
+        <div id="scannerModal">
+            <div id="qr-reader"></div>
+            <div id="scannerResult">📷 Наведите камеру на QR-код</div>
+            <button id="closeScannerBtn">✕</button>
+            <div class="scanner-hint">Наведите камеру на QR-код рулона</div>
+        </div>
+
+        <!-- ========== QR-ГЕНЕРАТОР ========== -->
+        <div id="qrModal" class="qr-modal">
+            <div class="qr-modal-content">
+                <h3 id="qrModalTitle">📱 QR-код рулона</h3>
+                <p id="qrModalSub">Сканируйте, чтобы быстро добавить рулон</p>
+                <div class="qr-code" id="qrCodeContainer"></div>
+                <div style="font-size:14px; font-weight:600; margin-bottom:8px;" id="qrRollNumber">ZR-001</div>
+                <div class="btn-group">
+                    <button class="btn btn-success btn-sm" id="downloadQrBtn">⬇️ Скачать PNG</button>
+                    <button class="btn btn-secondary btn-sm" id="closeQrBtn">Закрыть</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== МОДАЛКА ЗАБЫЛИ ПАРОЛЬ ========== -->
+        <div id="forgotModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); z-index:10000; justify-content:center; align-items:center;">
+            <div style="background:#fff; max-width:400px; width:90%; border-radius:20px; padding:24px; animation:fadeIn 0.3s ease-out;">
+                <div style="font-size:20px; font-weight:600; margin-bottom:16px;">🔑 Восстановление пароля</div>
+                <p style="color:#8888aa; margin-bottom:16px;">Введите ваш логин. Администратор увидит ваш запрос и поможет восстановить пароль.</p>
+                <input class="input" id="forgotLoginInput" placeholder="Ваш логин">
+                <div id="forgotError" class="error hidden"></div>
+                <button class="btn" id="forgotSubmitBtn">📧 Отправить запрос админу</button>
+                <button class="btn btn-secondary" id="forgotCloseBtn" style="margin-top:8px;">Закрыть</button>
+            </div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // === ПРОСТОЙ РАБОЧИЙ КОД (БЕЗ ОШИБОК) ===
+        // === КОНФИГУРАЦИЯ SUPABASE ===
+        // ============================================
+        const supabaseUrl = 'https://rbejdwshewypcnqidhdu.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiZWpkd3NoZXd5cGNucWlkaGR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU3ODI4NTcsImV4cCI6MjEwMTM1ODg1N30.KpxxcTJYW8CRmi78XMhxYU-WGGc5J80DBTrUbWUmwps';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // ============================================
+        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ
         // ============================================
 
         // ----- Состояние -----
         const state = {
-            users: JSON.parse(localStorage.getItem('zr_users') || '{}'),
-            films: JSON.parse(localStorage.getItem('zr_films') || '[]'),
-            currentUser: null,
-            isRegisterMode: false,
+            isLoggedIn: false,
+            isAdmin: false,
+            currentUser: '',
+            users: {},
+            films: [],
+            catalog: [],
+            blockedUsers: [],
+            logs: [],
+            userAvatars: {},
+            isRegister: false,
+            currentTab: 'tabRecords',
+            adminTab: 'adminDashboard',
+            qrInstance: null,
         };
 
-        // ----- DOM -----
+        // ----- DOM-элементы -----
         const $ = id => document.getElementById(id);
         const authScreen = $('authScreen');
         const userScreen = $('userScreen');
+        const adminScreen = $('adminScreen');
         const authTitle = $('authTitle');
         const authError = $('authError');
         const authSuccess = $('authSuccess');
         const loginInput = $('loginInput');
         const passwordInput = $('passwordInput');
+        const confirmPasswordGroup = $('confirmPasswordGroup');
         const confirmPasswordInput = $('confirmPasswordInput');
         const phoneInput = $('phoneInput');
-        const registerFields = $('registerFields');
         const authBtn = $('authBtn');
-        const switchLink = $('switchLink');
+        const switchAuthLink = $('switchAuthLink');
+        const forgotPasswordLink = $('forgotPasswordLink');
+        const forgotModal = $('forgotModal');
+        const forgotLoginInput = $('forgotLoginInput');
+        const forgotError = $('forgotError');
+        const forgotSubmitBtn = $('forgotSubmitBtn');
+        const forgotCloseBtn = $('forgotCloseBtn');
+
         const userNameDisplay = $('userNameDisplay');
+        const userLogoutBtn = $('userLogoutBtn');
         const rollInput = $('rollInput');
         const warrantyInput = $('warrantyInput');
         const userError = $('userError');
+        const warrantyInfoContainer = $('warrantyInfoContainer');
+        const warrantyName = $('warrantyName');
+        const warrantyDays = $('warrantyDays');
+        const warrantyEndDate = $('warrantyEndDate');
         const addRecordBtn = $('addRecordBtn');
         const userCount = $('userCount');
         const userRecords = $('userRecords');
-        const logoutBtn = $('logoutBtn');
-        const scanBtn = $('scanBtn');
 
-        // ----- Сохранение -----
-        function saveData() {
-            localStorage.setItem('zr_users', JSON.stringify(state.users));
-            localStorage.setItem('zr_films', JSON.stringify(state.films));
+        const profileAvatar = $('profileAvatar');
+        const profileName = $('profileName');
+        const profileLogin = $('profileLogin');
+        const profilePhone = $('profilePhone');
+        const profileFilmsCount = $('profileFilmsCount');
+        const profileActiveWarranty = $('profileActiveWarranty');
+        const profileExpiredWarranty = $('profileExpiredWarranty');
+        const changeAvatarBtn = $('changeAvatarBtn');
+
+        const adminLogoutBtn = $('adminLogoutBtn');
+        const statUsers = $('statUsers');
+        const statFilms = $('statFilms');
+        const statCatalog = $('statCatalog');
+        const statBlocked = $('statBlocked');
+        const adminNewRoll = $('adminNewRoll');
+        const adminNewName = $('adminNewName');
+        const adminNewEndDate = $('adminNewEndDate');
+        const adminAddCatalogBtn = $('adminAddCatalogBtn');
+        const catalogCount = $('catalogCount');
+        const adminCatalogList = $('adminCatalogList');
+        const adminCatalogSearch = $('adminCatalogSearch');
+        const adminUserList = $('adminUserList');
+        const adminLogsList = $('adminLogsList');
+        const adminActivitySummary = $('adminActivitySummary');
+        const exportCSVBtn = $('exportCSVBtn');
+
+        const scanBtn = $('scanBtn');
+        const scannerModal = $('scannerModal');
+        const closeScannerBtn = $('closeScannerBtn');
+        const scannerResult = $('scannerResult');
+
+        const qrModal = $('qrModal');
+        const qrModalTitle = $('qrModalTitle');
+        const qrModalSub = $('qrModalSub');
+        const qrCodeContainer = $('qrCodeContainer');
+        const qrRollNumber = $('qrRollNumber');
+        const downloadQrBtn = $('downloadQrBtn');
+        const closeQrBtn = $('closeQrBtn');
+
+        // ----- Валидация -----
+        function validateLogin(login) {
+            if (login.length < 6) return { valid: false, msg: 'Логин должен быть минимум 6 символов' };
+            if (!/^[a-zA-Z0-9_]+$/.test(login)) return { valid: false, msg: 'Только латиница, цифры и _' };
+            return { valid: true };
+        }
+
+        function validatePassword(password) {
+            if (password.length < 8) return { valid: false, msg: 'Пароль должен быть минимум 8 символов' };
+            if (!/[A-Z]/.test(password)) return { valid: false, msg: 'Должна быть заглавная буква' };
+            if (!/[0-9]/.test(password)) return { valid: false, msg: 'Должна быть хотя бы одна цифра' };
+            if (!/^[a-zA-Z0-9!@#$%^&*()_+]+$/.test(password)) return { valid: false, msg: 'Только латиница, цифры и спецсимволы' };
+            return { valid: true };
+        }
+
+        function validatePhone(phone) {
+            if (phone.length < 10) return { valid: false, msg: 'Введите 10 цифр после +7' };
+            if (!/^[0-9]+$/.test(phone)) return { valid: false, msg: 'Только цифры' };
+            return { valid: true };
+        }
+
+        // ----- Supabase функции -----
+        async function registerUser(login, password, phone) {
+            try {
+                const { error } = await supabase
+                    .from('users')
+                    .insert([{ login, password, phone, blocked: false }]);
+                if (error) {
+                    if (error.code === '23505') {
+                        showError(authError, '❌ Пользователь с таким логином уже существует');
+                    } else {
+                        showError(authError, '❌ Ошибка: ' + error.message);
+                    }
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                showError(authError, '❌ Ошибка: ' + e.message);
+                return false;
+            }
+        }
+
+        async function loginUser(login, password) {
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('login', login)
+                    .maybeSingle();
+
+                if (error || !data) {
+                    showError(authError, '❌ Пользователь не найден');
+                    return false;
+                }
+
+                if (data.blocked) {
+                    showError(authError, '🚫 Аккаунт заблокирован');
+                    return false;
+                }
+
+                if (data.password !== password) {
+                    showError(authError, '❌ Неверный пароль');
+                    return false;
+                }
+
+                return data;
+            } catch (e) {
+                showError(authError, '❌ Ошибка: ' + e.message);
+                return false;
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const { data, error } = await supabase.from('users').select('*');
+                if (error) return {};
+                const users = {};
+                data.forEach(u => {
+                    users[u.login] = {
+                        password: u.password,
+                        phone: u.phone,
+                        blocked: u.blocked || false
+                    };
+                });
+                return users;
+            } catch (e) {
+                console.error(e);
+                return {};
+            }
+        }
+
+        async function loadUserFilms(username) {
+            try {
+                const { data, error } = await supabase
+                    .from('films')
+                    .select('*')
+                    .eq('username', username);
+                if (error) return [];
+                return data;
+            } catch (e) {
+                console.error(e);
+                return [];
+            }
+        }
+
+        async function addFilm(roll, warranty, user, endDate) {
+            try {
+                const { error } = await supabase
+                    .from('films')
+                    .insert([{
+                        id: Date.now().toString(),
+                        roll,
+                        warranty,
+                        date: new Date().toLocaleString('ru-RU'),
+                        username: user,
+                        endDate
+                    }]);
+                if (error) {
+                    alert('❌ Ошибка: ' + error.message);
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                alert('❌ Ошибка: ' + e.message);
+                return false;
+            }
+        }
+
+        async function loadCatalog() {
+            try {
+                const { data, error } = await supabase.from('catalog').select('*');
+                if (error) return [];
+                return data;
+            } catch (e) {
+                console.error(e);
+                return [];
+            }
+        }
+
+        async function addCatalogItem(roll, name, endDate) {
+            try {
+                const { error } = await supabase
+                    .from('catalog')
+                    .insert([{ roll, name, endDate }]);
+                if (error) {
+                    alert('❌ Ошибка: ' + error.message);
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                alert('❌ Ошибка: ' + e.message);
+                return false;
+            }
+        }
+
+        async function deleteCatalogItem(roll) {
+            try {
+                const { error } = await supabase
+                    .from('catalog')
+                    .delete()
+                    .eq('roll', roll);
+                if (error) {
+                    alert('❌ Ошибка: ' + error.message);
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                alert('❌ Ошибка: ' + e.message);
+                return false;
+            }
+        }
+
+        async function toggleBlockUser(username) {
+            if (username === 'admin') {
+                alert('❌ Администратора нельзя заблокировать');
+                return;
+            }
+            try {
+                const current = state.users[username];
+                if (!current) return;
+                const newBlocked = !current.blocked;
+                const { error } = await supabase
+                    .from('users')
+                    .update({ blocked: newBlocked })
+                    .eq('login', username);
+                if (error) {
+                    alert('❌ Ошибка: ' + error.message);
+                    return;
+                }
+                state.users[username].blocked = newBlocked;
+                if (newBlocked) {
+                    state.blockedUsers.push(username);
+                    addLog('Заблокировал: ' + username);
+                } else {
+                    state.blockedUsers = state.blockedUsers.filter(u => u !== username);
+                    addLog('Разблокировал: ' + username);
+                }
+                renderAdminPanel();
+            } catch (e) {
+                alert('❌ Ошибка: ' + e.message);
+            }
+        }
+
+        async function addLog(action) {
+            try {
+                await supabase
+                    .from('logs')
+                    .insert([{
+                        action: action,
+                        username: state.currentUser || 'system',
+                        time: new Date().toLocaleString('ru-RU')
+                    }]);
+            } catch (e) {
+                console.error('Ошибка логирования:', e);
+            }
+        }
+
+        async function loadLogs() {
+            try {
+                const { data, error } = await supabase
+                    .from('logs')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(100);
+                if (error) return [];
+                return data;
+            } catch (e) {
+                console.error(e);
+                return [];
+            }
         }
 
         // ----- Показать экраны -----
         function showAuthScreen() {
             authScreen.classList.remove('hidden');
             userScreen.classList.add('hidden');
+            adminScreen.classList.add('hidden');
         }
 
         function showUserScreen() {
             authScreen.classList.add('hidden');
             userScreen.classList.remove('hidden');
+            adminScreen.classList.add('hidden');
             userNameDisplay.textContent = '👤 ' + state.currentUser;
-            renderRecords();
+            renderUserRecords();
+            updateProfile();
+            switchTab('tabRecords');
         }
 
-        // ----- Ошибки -----
-        function showError(el, msg) {
-            el.textContent = msg;
-            el.classList.remove('hidden');
+        function showAdminScreen() {
+            authScreen.classList.add('hidden');
+            userScreen.classList.add('hidden');
+            adminScreen.classList.remove('hidden');
+            renderAdminPanel();
+            switchAdminTab('adminDashboard');
         }
 
-        function hideErrors() {
+        // ----- Авторизация -----
+        async function handleAuth() {
+            const login = loginInput.value.trim();
+            const password = passwordInput.value.trim();
+            const phone = phoneInput.value.trim();
             authError.classList.add('hidden');
             authSuccess.classList.add('hidden');
-            userError.classList.add('hidden');
+
+            if (!login || !password) {
+                showError(authError, '❌ Заполните все поля');
+                return;
+            }
+
+            if (state.isRegister) {
+                const loginCheck = validateLogin(login);
+                if (!loginCheck.valid) {
+                    showError(authError, '❌ ' + loginCheck.msg);
+                    return;
+                }
+                const passCheck = validatePassword(password);
+                if (!passCheck.valid) {
+                    showError(authError, '❌ ' + passCheck.msg);
+                    return;
+                }
+                const phoneCheck = validatePhone(phone);
+                if (!phoneCheck.valid) {
+                    showError(authError, '❌ Телефон: ' + phoneCheck.msg);
+                    return;
+                }
+                const confirm = confirmPasswordInput.value.trim();
+                if (password !== confirm) {
+                    showError(authError, '❌ Пароли не совпадают');
+                    return;
+                }
+
+                const success = await registerUser(login, password, phone);
+                if (success) {
+                    showSuccess(authSuccess, '✅ Регистрация прошла успешно! Теперь войдите.');
+                    toggleAuthMode();
+                }
+                return;
+            }
+
+            // Вход
+            if (login === 'admin' && password === 'admin123') {
+                state.isLoggedIn = true;
+                state.isAdmin = true;
+                state.currentUser = 'admin';
+                await addLog('Вход в админ-панель');
+                showAdminScreen();
+                return;
+            }
+
+            const userData = await loginUser(login, password);
+            if (userData) {
+                state.isLoggedIn = true;
+                state.isAdmin = false;
+                state.currentUser = login;
+                await addLog('Вход в систему: ' + login);
+                state.films = await loadUserFilms(login);
+                showUserScreen();
+            }
         }
 
-        // ----- Переключение режима -----
-        function toggleMode() {
-            state.isRegisterMode = !state.isRegisterMode;
-            authTitle.textContent = state.isRegisterMode ? '📝 Регистрация' : '🔐 Авторизация';
-            authBtn.textContent = state.isRegisterMode ? 'Зарегистрироваться' : 'Войти';
-            switchLink.textContent = state.isRegisterMode ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться';
-            registerFields.classList.toggle('hidden');
-            hideErrors();
+        function toggleAuthMode() {
+            state.isRegister = !state.isRegister;
+            authTitle.textContent = state.isRegister ? '📝 Регистрация' : '🔐 Авторизация';
+            authBtn.textContent = state.isRegister ? 'Зарегистрироваться' : 'Войти';
+            switchAuthLink.textContent = state.isRegister ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться';
+            confirmPasswordGroup.classList.toggle('hidden');
+            authError.classList.add('hidden');
+            authSuccess.classList.add('hidden');
             loginInput.value = '';
             passwordInput.value = '';
             confirmPasswordInput.value = '';
             phoneInput.value = '';
         }
 
-        // ----- Вход / Регистрация -----
-        function handleAuth() {
-            hideErrors();
-            const login = loginInput.value.trim();
-            const password = passwordInput.value.trim();
+        function showForgotModal() {
+            forgotModal.style.display = 'flex';
+            forgotLoginInput.value = '';
+            forgotError.classList.add('hidden');
+        }
 
-            if (!login || !password) {
-                showError(authError, '❌ Заполните логин и пароль');
+        async function handleForgotPassword() {
+            const login = forgotLoginInput.value.trim();
+            forgotError.classList.add('hidden');
+
+            if (!login) {
+                showError(forgotError, '❌ Введите логин');
                 return;
             }
 
-            // --- РЕГИСТРАЦИЯ ---
-            if (state.isRegisterMode) {
-                const confirm = confirmPasswordInput.value.trim();
-                const phone = phoneInput.value.trim();
-
-                if (login.length < 6) {
-                    showError(authError, '❌ Логин должен быть минимум 6 символов');
-                    return;
+            const users = await loadUsers();
+            if (users[login]) {
+                await addLog('🔔 ЗАПРОС ВОССТАНОВЛЕНИЯ ПАРОЛЯ от: ' + login);
+                const phone = users[login].phone;
+                if (phone) {
+                    const waUrl = 'https://wa.me/7' + phone + '?text=' + encodeURIComponent(
+                        '🔑 Запрос на восстановление пароля\n' +
+                        'Логин: ' + login + '\n' +
+                        'Ваш пароль: ' + users[login].password + '\n' +
+                        'С уважением, ZR Kazakhstan'
+                    );
+                    window.open(waUrl, '_blank');
                 }
-                if (password.length < 4) {
-                    showError(authError, '❌ Пароль должен быть минимум 4 символа');
-                    return;
-                }
-                if (password !== confirm) {
-                    showError(authError, '❌ Пароли не совпадают');
-                    return;
-                }
-                if (!phone) {
-                    showError(authError, '❌ Введите телефон');
-                    return;
-                }
-                if (state.users[login]) {
-                    showError(authError, '❌ Пользователь уже существует');
-                    return;
-                }
-
-                state.users[login] = { password, phone };
-                saveData();
-                showError(authSuccess, '✅ Регистрация успешна! Теперь войдите.');
-                toggleMode();
-                return;
-            }
-
-            // --- ВХОД ---
-            if (login === 'admin' && password === 'admin123') {
-                state.currentUser = 'admin';
-                showUserScreen();
-                return;
-            }
-
-            if (state.users[login]) {
-                if (state.users[login].password === password) {
-                    state.currentUser = login;
-                    showUserScreen();
-                    return;
-                } else {
-                    showError(authError, '❌ Неверный пароль');
-                    return;
-                }
+                alert('✅ Запрос отправлен администратору!\nАдминистратор свяжется с вами по WhatsApp.');
+                forgotModal.style.display = 'none';
             } else {
-                showError(authError, '❌ Пользователь не найден');
+                showError(forgotError, '❌ Пользователь с таким логином не найден');
             }
         }
 
-        // ----- Добавить запись -----
-        function handleAddRecord() {
-            hideErrors();
+        // ----- QR-ГЕНЕРАТОР -----
+        function showQrModal(roll) {
+            const catalogItem = state.catalog.find(c => c.roll === roll);
+            if (!catalogItem) {
+                alert('❌ Рулон не найден');
+                return;
+            }
+
+            qrModalTitle.textContent = '📱 QR-код: ' + roll;
+            qrModalSub.textContent = 'Модель: ' + catalogItem.name + ' | До: ' + new Date(catalogItem.endDate)
+                .toLocaleDateString('ru-RU');
+            qrRollNumber.textContent = roll;
+
+            qrCodeContainer.innerHTML = '';
+            try {
+                if (typeof QRCode !== 'undefined') {
+                    state.qrInstance = new QRCode(qrCodeContainer, {
+                        text: roll,
+                        width: 200,
+                        height: 200,
+                        colorDark: '#000000',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                } else {
+                    qrCodeContainer.innerHTML = '<div style="padding:20px; border:2px dashed #c9a84c; border-radius:12px; font-size:16px; color:#8888aa;">QR-код: ' + roll + '</div>';
+                }
+            } catch (e) {
+                qrCodeContainer.innerHTML = '<div style="padding:20px; border:2px dashed #c9a84c; border-radius:12px; font-size:16px; color:#8888aa;">QR-код: ' + roll + '</div>';
+            }
+
+            qrModal.classList.add('active');
+            addLog('Сгенерировал QR для: ' + roll);
+        }
+
+        function closeQrModal() {
+            qrModal.classList.remove('active');
+            if (state.qrInstance) {
+                try {
+                    state.qrInstance.clear();
+                } catch (e) {}
+                state.qrInstance = null;
+            }
+            qrCodeContainer.innerHTML = '';
+        }
+
+        function downloadQr() {
+            const canvas = qrCodeContainer.querySelector('canvas');
+            if (canvas) {
+                const link = document.createElement('a');
+                link.download = 'qr-' + qrRollNumber.textContent + '.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                addLog('Скачал QR для: ' + qrRollNumber.textContent);
+            } else {
+                alert('❌ Сначала сгенерируйте QR-код');
+            }
+        }
+
+        // ----- QR-СКАНЕР -----
+        let html5QrCode = null;
+
+        async function startScanner() {
+            scannerResult.textContent = '🔄 Инициализация камеры...';
+            scannerModal.classList.add('active');
+
+            try {
+                if (typeof Html5Qrcode === 'undefined') {
+                    throw new Error('Библиотека сканера не загружена');
+                }
+                html5QrCode = new Html5Qrcode("qr-reader");
+
+                const config = {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    formatsToSupport: [
+                        Html5QrcodeSupportedFormats.QR_CODE,
+                        Html5QrcodeSupportedFormats.EAN_13,
+                        Html5QrcodeSupportedFormats.CODE_128
+                    ]
+                };
+
+                await html5QrCode.start({ facingMode: "environment" },
+                    config,
+                    function(decodedText) {
+                        scannerResult.textContent = '✅ Найден код: ' + decodedText;
+                        if (rollInput) {
+                            rollInput.value = decodedText;
+                            rollInput.dispatchEvent(new Event('input'));
+                        }
+                        setTimeout(() => {
+                            stopScanner();
+                            alert('✅ Рулон отсканирован: ' + decodedText);
+                        }, 500);
+                    },
+                    function(errorMessage) {
+                        // Игнорируем
+                    }
+                );
+
+                scannerResult.textContent = '📷 Камера готова. Наведите на QR-код.';
+            } catch (err) {
+                scannerResult.textContent = '❌ Ошибка: ' + err.message;
+                setTimeout(() => {
+                    scannerModal.classList.remove('active');
+                }, 3000);
+            }
+        }
+
+        function stopScanner() {
+            if (html5QrCode) {
+                try {
+                    html5QrCode.stop().then(() => {
+                        html5QrCode.clear();
+                        html5QrCode = null;
+                    }).catch(err => {});
+                } catch (e) {}
+            }
+            scannerModal.classList.remove('active');
+            scannerResult.textContent = '📷 Наведите камеру на QR-код';
+        }
+
+        // ----- Пользователь -----
+        async function handleAddRecord() {
             const roll = rollInput.value.trim();
             const warranty = warrantyInput.value.trim();
+            userError.classList.add('hidden');
+            warrantyInfoContainer.classList.add('hidden');
 
             if (!roll || !warranty) {
                 showError(userError, '❌ Заполните все поля');
                 return;
             }
 
-            const newRecord = {
-                id: Date.now().toString(),
-                roll: roll,
-                warranty: warranty,
-                date: new Date().toLocaleDateString('ru-RU'),
-                user: state.currentUser,
-            };
-
-            state.films.push(newRecord);
-            saveData();
-            rollInput.value = '';
-            warrantyInput.value = '';
-            renderRecords();
-            alert('✅ Плёнка добавлена в архив!');
-        }
-
-        // ----- Отобразить записи -----
-        function renderRecords() {
-            const userFilms = state.films.filter(f => f.user === state.currentUser);
-            userCount.textContent = userFilms.length;
-
-            if (userFilms.length === 0) {
-                userRecords.innerHTML = '<div style="color:#888; text-align:center; margin-top:20px;">Нет добавленных плёнок</div>';
+            const catalogItem = state.catalog.find(c => c.roll === roll);
+            if (!catalogItem) {
+                showError(userError, '❌ Рулон не найден в системе ZR Kazakhstan');
                 return;
             }
 
-            userRecords.innerHTML = userFilms.map(item => `
-                <div class="record">
-                    <div class="record-roll">🎯 ${item.roll}</div>
-                    <div class="record-warranty">🛡️ ${item.warranty}</div>
-                    <div class="record-date">📅 ${item.date}</div>
+            const existing = state.films.find(f => f.roll === roll);
+            if (existing) {
+                showError(userError, '❌ Рулон уже зарегистрирован пользователем: ' + existing.user);
+                return;
+            }
+
+            const success = await addFilm(roll, warranty, state.currentUser, catalogItem.endDate);
+            if (success) {
+                const newRecord = {
+                    id: Date.now().toString(),
+                    roll,
+                    warranty,
+                    date: new Date().toLocaleString('ru-RU'),
+                    username: state.currentUser,
+                    endDate: catalogItem.endDate,
+                };
+                state.films = [newRecord, ...state.films];
+                rollInput.value = '';
+                warrantyInput.value = '';
+                renderUserRecords();
+                updateProfile();
+                await addLog('Добавил плёнку: ' + roll);
+
+                const info = getWarrantyInfo(roll);
+                if (info && info.daysLeft > 0) {
+                    alert('✅ Готово!\nГарантия действует ещё ' + info.daysLeft + ' дней.');
+                } else if (info && info.daysLeft <= 0) {
+                    alert('⚠️ Внимание!\nГарантия на этот рулон истекла.');
+                } else {
+                    alert('✅ Готово! Плёнка добавлена в архив.');
+                }
+            }
+        }
+
+        function getWarrantyInfo(roll) {
+            const item = state.catalog.find(c => c.roll === roll);
+            if (!item) return null;
+            const endDate = new Date(item.endDate);
+            const now = new Date();
+            const diff = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+            return { ...item, daysLeft: diff, isExpired: diff < 0 };
+        }
+
+        function checkWarranty() {
+            const roll = rollInput.value.trim();
+            warrantyInfoContainer.classList.add('hidden');
+            if (!roll) return;
+
+            const info = getWarrantyInfo(roll);
+            if (!info) return;
+
+            warrantyName.textContent = '📅 ' + info.name;
+            const color = info.isExpired ? 'warranty-expired' : 'warranty-ok';
+            warrantyDays.textContent = info.isExpired ? '⏰ Гарантия истекла' : '⏳ Осталось ' + info.daysLeft + ' дней';
+            warrantyDays.className = 'warranty-days ' + color;
+            warrantyEndDate.textContent = 'До: ' + new Date(info.endDate).toLocaleDateString('ru-RU');
+            warrantyInfoContainer.classList.remove('hidden');
+        }
+
+        function renderUserRecords() {
+            const userFilms = state.films.filter(f => f.username === state.currentUser);
+            userCount.textContent = userFilms.length;
+
+            if (userFilms.length === 0) {
+                userRecords.innerHTML = '<div style="color:#8888aa; text-align:center; margin-top:20px;">Нет добавленных плёнок</div>';
+                return;
+            }
+
+            userRecords.innerHTML = userFilms.map(item => {
+                const info = getWarrantyInfo(item.roll);
+                const status = info ? (info.isExpired ? '⏰ Истекла' : '✅ ' + info.daysLeft + ' дней') : '';
+                const statusClass = info && info.isExpired ? 'status-expired' : 'status-ok';
+                return `
+                    <div class="record">
+                        <div class="record-roll">🎯 ${item.roll}</div>
+                        <div class="record-warranty">🛡️ ${item.warranty}</div>
+                        <div class="record-date">📅 ${item.date}</div>
+                        ${status ? `<div class="record-status ${statusClass}">${status}</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ----- Профиль -----
+        function updateProfile() {
+            const userFilms = state.films.filter(f => f.username === state.currentUser);
+            profileName.textContent = state.currentUser;
+            profileLogin.textContent = '@' + state.currentUser;
+
+            const userData = state.users[state.currentUser];
+            if (userData && userData.phone) {
+                const phone = userData.phone;
+                const formatted = '+7 ' + phone.slice(0, 3) + ' ' + phone.slice(3, 6) + ' ' + phone.slice(6, 8) + ' ' + phone
+                    .slice(8, 10);
+                profilePhone.textContent = '📱 ' + formatted;
+            } else {
+                profilePhone.textContent = '📱 Нет телефона';
+            }
+
+            profileFilmsCount.textContent = userFilms.length;
+
+            const active = userFilms.filter(f => {
+                const info = getWarrantyInfo(f.roll);
+                return info && !info.isExpired;
+            });
+            profileActiveWarranty.textContent = active.length;
+            profileExpiredWarranty.textContent = userFilms.length - active.length;
+
+            if (state.userAvatars[state.currentUser]) {
+                profileAvatar.src = state.userAvatars[state.currentUser];
+            }
+        }
+
+        function changeAvatar() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    state.userAvatars[state.currentUser] = ev.target.result;
+                    profileAvatar.src = ev.target.result;
+                    addLog('Обновил аватар');
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        }
+
+        // ----- Админ -----
+        async function renderAdminPanel() {
+            const users = await loadUsers();
+            state.users = users;
+
+            const catalog = await loadCatalog();
+            state.catalog = catalog;
+
+            const logs = await loadLogs();
+            state.logs = logs;
+
+            const userList = Object.keys(users);
+            const blockedCount = userList.filter(u => users[u].blocked).length;
+            statUsers.textContent = userList.length;
+            statFilms.textContent = state.films.length;
+            statCatalog.textContent = catalog.length;
+            statBlocked.textContent = blockedCount;
+
+            const today = new Date().toLocaleDateString('ru-RU');
+            const todayLogs = logs.filter(l => l.time && l.time.includes(today));
+            adminActivitySummary.innerHTML = `
+                <div>📊 Сегодня: ${todayLogs.length} действий</div>
+                <div>👥 Пользователей: ${userList.length}</div>
+                <div>📦 Рулонов: ${catalog.length}</div>
+                <div style="margin-top:8px; font-size:12px;">Последние действия: ${logs.slice(0,3).map(l => l.action).join(', ')}</div>
+            `;
+
+            renderUserList(users);
+            renderCatalog(catalog);
+            renderLogs(logs);
+        }
+
+        function renderUserList(users) {
+            const userList = Object.keys(users);
+            if (userList.length === 0) {
+                adminUserList.innerHTML = '<div style="color:#8888aa; text-align:center; padding:20px;">Нет пользователей</div>';
+                return;
+            }
+
+            adminUserList.innerHTML = userList.map(u => {
+                const isBlocked = users[u].blocked || false;
+                const filmsCount = state.films.filter(f => f.username === u).length;
+                const phone = users[u].phone ? '+7 ' + users[u].phone : '—';
+                const password = users[u].password || '—';
+
+                return `
+                    <div class="user-item">
+                        <div class="user-info">
+                            <span class="user-name">👤 ${u}</span>
+                            <span class="user-email">📱 ${phone} | 📦 ${filmsCount} плёнок</span>
+                            <span class="user-email" style="color:#c9a84c; font-weight:600;">🔑 Пароль: ${password}</span>
+                        </div>
+                        <div>
+                            <span class="user-status ${isBlocked ? 'blocked' : ''}">${isBlocked ? '🚫 Заблокирован' : '✅ Активен'}</span>
+                            <button onclick="window.toggleBlockUser('${u}')" class="btn btn-sm ${isBlocked ? 'btn-success' : 'btn-danger'}" style="margin-left:8px; padding:4px 12px; font-size:12px;">
+                                ${isBlocked ? 'Разблокировать' : 'Заблокировать'}
+                            </button>
+                            <button onclick="window.sendWhatsApp('${u}')" class="btn btn-sm btn-whatsapp" style="margin-left:4px; padding:4px 12px; font-size:12px;">
+                                💬 WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function sendWhatsApp(login) {
+            const userData = state.users[login];
+            if (!userData || !userData.phone) {
+                alert('❌ У пользователя нет телефона');
+                return;
+            }
+            const phone = userData.phone;
+            const waUrl = 'https://wa.me/7' + phone + '?text=' + encodeURIComponent(
+                'Здравствуйте, ' + login + '!\n' +
+                'Это ZR Kazakhstan. Ваш пароль: ' + userData.password + '\n' +
+                'С уважением, администратор.'
+            );
+            window.open(waUrl, '_blank');
+            addLog('Отправил WhatsApp пользователю: ' + login);
+        }
+
+        function renderCatalog(catalog) {
+            const search = (adminCatalogSearch?.value || '').toLowerCase();
+            const filtered = catalog.filter(c => c.roll.toLowerCase().includes(search) || c.name.toLowerCase().includes(
+                search));
+            catalogCount.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                adminCatalogList.innerHTML = '<div style="color:#8888aa; text-align:center; padding:20px;">Справочник пуст</div>';
+                return;
+            }
+
+            adminCatalogList.innerHTML = filtered.map(item => `
+                <div class="user-item">
+                    <div>
+                        <div>📦 ${item.roll}</div>
+                        <div style="font-size:13px; color:#8888aa;">${item.name}</div>
+                        <div style="font-size:12px; color:#8888aa;">До ${new Date(item.endDate).toLocaleDateString('ru-RU')}</div>
+                    </div>
+                    <div>
+                        <button onclick="window.showQrModal('${item.roll}')" class="btn btn-sm btn-qr" style="margin-right:8px; padding:4px 12px; font-size:12px;">📱 QR</button>
+                        <button onclick="window.deleteCatalogItem('${item.roll}')" style="background:none; border:none; font-size:20px; cursor:pointer; color:#e74c3c;">🗑️</button>
+                    </div>
                 </div>
             `).join('');
         }
 
+        async function deleteCatalogItem(roll) {
+            if (confirm('Удалить рулон ' + roll + '?')) {
+                const success = await deleteCatalogItem(roll);
+                if (success) {
+                    state.catalog = state.catalog.filter(c => c.roll !== roll);
+                    addLog('Удалил рулон: ' + roll);
+                    renderAdminPanel();
+                }
+            }
+        }
+
+        async function handleAddCatalogItem() {
+            const roll = adminNewRoll.value.trim();
+            const name = adminNewName.value.trim();
+            const endDate = adminNewEndDate.value.trim();
+
+            if (!roll || !name || !endDate) {
+                alert('❌ Заполните все поля');
+                return;
+            }
+
+            if (state.catalog.find(c => c.roll === roll)) {
+                alert('❌ Рулон уже есть в каталоге');
+                return;
+            }
+
+            const success = await addCatalogItem(roll, name, endDate);
+            if (success) {
+                state.catalog.push({ roll, name, endDate });
+                addLog('Добавил рулон: ' + roll);
+                adminNewRoll.value = '';
+                adminNewName.value = '';
+                adminNewEndDate.value = '';
+                renderAdminPanel();
+                alert('✅ Рулон добавлен в справочник');
+            }
+        }
+
+        function renderLogs(logs) {
+            if (logs.length === 0) {
+                adminLogsList.innerHTML = '<div style="color:#8888aa; text-align:center; padding:20px;">Нет записей</div>';
+                return;
+            }
+            adminLogsList.innerHTML = logs.map(l => `
+                <div style="padding:6px 0; border-bottom:1px solid #e8e0d8; display:flex; justify-content:space-between;">
+                    <span>${l.action}</span>
+                    <span style="color:#8888aa; font-size:12px;">${l.time || l.created_at} | ${l.username}</span>
+                </div>
+            `).join('');
+        }
+
+        function exportCSV() {
+            let csv = 'Пользователь,Телефон,Пароль,Рулон,Гарантия,Дата,Окончание\n';
+            state.films.forEach(f => {
+                const userData = state.users[f.username];
+                const phone = userData ? '+7' + userData.phone : '—';
+                const password = userData ? userData.password : '—';
+                const info = state.catalog.find(c => c.roll === f.roll);
+                csv +=
+                    `${f.username},${phone},${password},${f.roll},${f.warranty},${f.date},${info ? info.endDate : '—'}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'zr-kazakhstan-export-' + new Date().toISOString().slice(0, 10) + '.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            addLog('Экспортировал данные в CSV');
+        }
+
         // ----- Выход -----
         function logout() {
-            state.currentUser = null;
+            state.isLoggedIn = false;
+            state.isAdmin = false;
+            state.currentUser = '';
             showAuthScreen();
             loginInput.value = '';
             passwordInput.value = '';
         }
 
-        // ----- Демо QR -----
-        function startScanner() {
-            alert('📷 Демо-режим сканера. Введите номер рулона вручную.');
+        // ----- Вкладки -----
+        function switchTab(tabId) {
+            state.currentTab = tabId;
+            document.querySelectorAll('#userScreen .tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#userScreen .tab-button').forEach(el => el.classList.remove('active'));
+            const tabContent = document.getElementById(tabId);
+            if (tabContent) tabContent.classList.add('active');
+            document.querySelector(`#userScreen .tab-button[data-tab="${tabId}"]`)?.classList.add('active');
+        }
+
+        function switchAdminTab(tabId) {
+            state.adminTab = tabId;
+            document.querySelectorAll('#adminScreen .tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('#adminScreen .tab-button').forEach(el => el.classList.remove('active'));
+            const tabContent = document.getElementById(tabId);
+            if (tabContent) tabContent.classList.add('active');
+            document.querySelector(`#adminScreen .tab-button[data-tab="${tabId}"]`)?.classList.add('active');
+        }
+
+        // ----- Утилиты -----
+        function showError(el, msg) {
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+
+        function showSuccess(el, msg) {
+            el.textContent = msg;
+            el.classList.remove('hidden');
         }
 
         // ----- Инициализация -----
-        function init() {
-            showAuthScreen();
-
+        async function init() {
+            // Авторизация
             authBtn.addEventListener('click', handleAuth);
-            switchLink.addEventListener('click', toggleMode);
-
-            // Вход по Enter
+            switchAuthLink.addEventListener('click', toggleAuthMode);
             loginInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
             passwordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
             confirmPasswordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
             phoneInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
+            forgotPasswordLink.addEventListener('click', showForgotModal);
+            forgotCloseBtn.addEventListener('click', () => { forgotModal.style.display = 'none'; });
+            forgotSubmitBtn.addEventListener('click', handleForgotPassword);
+            forgotLoginInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleForgotPassword(); });
 
+            // Пользователь
             addRecordBtn.addEventListener('click', handleAddRecord);
-            logoutBtn.addEventListener('click', logout);
+            userLogoutBtn.addEventListener('click', logout);
+            rollInput.addEventListener('input', checkWarranty);
+            changeAvatarBtn.addEventListener('click', changeAvatar);
+
+            // QR-сканер
             scanBtn.addEventListener('click', startScanner);
+            closeScannerBtn.addEventListener('click', stopScanner);
+
+            // Админ
+            adminLogoutBtn.addEventListener('click', logout);
+            adminAddCatalogBtn.addEventListener('click', handleAddCatalogItem);
+            adminCatalogSearch?.addEventListener('input', () => renderCatalog(state.catalog));
+            exportCSVBtn.addEventListener('click', exportCSV);
+
+            // QR-генератор
+            closeQrBtn.addEventListener('click', closeQrModal);
+            downloadQrBtn.addEventListener('click', downloadQr);
+
+            // Вкладки
+            document.querySelectorAll('#userScreen .tab-button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+            document.querySelectorAll('#adminScreen .tab-button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    switchAdminTab(this.dataset.tab);
+                });
+            });
+
+            // Экспорт функций для HTML
+            window.toggleBlockUser = toggleBlockUser;
+            window.deleteCatalogItem = deleteCatalogItem;
+            window.showQrModal = showQrModal;
+            window.closeQrModal = closeQrModal;
+            window.sendWhatsApp = sendWhatsApp;
+
+            // Загрузка данных
+            state.users = await loadUsers();
+            state.catalog = await loadCatalog();
+            showAuthScreen();
+
+            console.log('✅ Приложение загружено');
         }
 
         document.addEventListener('DOMContentLoaded', init);

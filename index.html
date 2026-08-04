@@ -11,22 +11,21 @@
 
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- QR-библиотеки -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background: #f5f0eb; color: #2d2a24; min-height: 100vh; padding: 16px; transition: background 0.3s; }
+        body { background: #f5f0eb; color: #2d2a24; min-height: 100vh; padding: 16px; }
         @media (prefers-color-scheme: dark) { body { background: #0a0a12; color: #e8e4de; } .card { background: #16161f !important; } .input { background: #222233 !important; color: #e8e4de !important; border-color: #333355 !important; } .record { background: #1a1a2e !important; } }
         .container { max-width: 500px; margin: 0 auto; }
         .logo { text-align: center; margin-bottom: 20px; }
         .logo img { width: 100px; height: auto; border-radius: 50%; box-shadow: 0 4px 20px rgba(201,168,76,0.2); }
         .logo-text { font-size: 20px; font-weight: 700; color: #c9a84c; letter-spacing: 4px; margin-top: 8px; display: block; }
         .logo-sub { font-size: 13px; color: #8888aa; letter-spacing: 2px; }
-        .card { background: #ffffff; border-radius: 20px; padding: 24px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: background 0.3s; }
+        .card { background: #ffffff; border-radius: 20px; padding: 24px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
         .card-title { font-size: 20px; font-weight: 600; margin-bottom: 16px; text-align: center; }
-        .input { width: 100%; padding: 14px 16px; border: 2px solid #e8e0d8; border-radius: 12px; background: #f8f5f0; font-size: 16px; margin-bottom: 12px; outline: none; transition: all 0.2s; }
+        .input { width: 100%; padding: 14px 16px; border: 2px solid #e8e0d8; border-radius: 12px; background: #f8f5f0; font-size: 16px; margin-bottom: 12px; outline: none; }
         .input:focus { border-color: #c9a84c; box-shadow: 0 0 0 4px rgba(201,168,76,0.1); }
         .input::placeholder { color: #bbb; }
         .btn { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 18px; font-weight: 600; color: #fff; background: #c9a84c; cursor: pointer; transition: all 0.2s; margin-bottom: 8px; }
@@ -39,7 +38,7 @@
         .error { background: rgba(231,76,60,0.1); color: #e74c3c; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-weight: 500; font-size: 14px; }
         .success { background: rgba(39,174,96,0.1); color: #27ae60; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-weight: 500; font-size: 14px; }
         .hidden { display: none !important; }
-        .record { background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 10px; border-left: 4px solid #c9a84c; transition: background 0.3s; }
+        .record { background: #fff; border-radius: 12px; padding: 14px; margin-bottom: 10px; border-left: 4px solid #c9a84c; }
         .record-roll { font-size: 16px; font-weight: 600; }
         .record-warranty { font-size: 14px; color: #c9a84c; margin-top: 2px; }
         .record-date { font-size: 12px; color: #8888aa; margin-top: 4px; }
@@ -57,12 +56,6 @@
         .phone-prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 16px; font-weight: 600; color: #2d2a24; pointer-events: none; }
         @media (prefers-color-scheme: dark) { .phone-prefix { color: #e8e4de; } }
         .input-phone { padding-left: 48px; }
-        #scannerModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; justify-content: center; align-items: center; flex-direction: column; }
-        #scannerModal.active { display: flex; }
-        #qr-reader { width: 100%; max-width: 500px; height: auto; min-height: 400px; }
-        #scannerResult { color: #fff; text-align: center; margin-top: 16px; font-size: 14px; padding: 0 20px; }
-        #closeScannerBtn { position: absolute; top: 40px; right: 20px; background: rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; border: none; color: white; font-size: 24px; cursor: pointer; }
-        .scanner-hint { position: absolute; bottom: 80px; color: #fff; opacity: 0.6; font-size: 14px; }
         .forgot-link { text-align: right; margin-top: -8px; margin-bottom: 12px; }
         .forgot-link a { color: #8888aa; font-size: 13px; cursor: pointer; text-decoration: none; }
         .forgot-link a:hover { color: #c9a84c; text-decoration: underline; }
@@ -73,26 +66,30 @@
         .qr-modal-content .qr-code canvas, .qr-modal-content .qr-code img { width: 200px !important; height: 200px !important; }
         .qr-modal-content .btn-group { display: flex; gap: 10px; margin-top: 16px; }
         .qr-modal-content .btn-group .btn { flex: 1; margin-bottom: 0; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-in { animation: fadeIn 0.3s ease-out; }
+        #scannerModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; justify-content: center; align-items: center; flex-direction: column; }
+        #scannerModal.active { display: flex; }
+        #qr-reader { width: 100%; max-width: 500px; height: auto; min-height: 400px; }
+        #scannerResult { color: #fff; text-align: center; margin-top: 16px; font-size: 14px; padding: 0 20px; }
+        #closeScannerBtn { position: absolute; top: 40px; right: 20px; background: rgba(255,255,255,0.2); width: 44px; height: 44px; border-radius: 50%; border: none; color: white; font-size: 24px; cursor: pointer; }
+        .scanner-hint { position: absolute; bottom: 80px; color: #fff; opacity: 0.6; font-size: 14px; }
         @media (max-width: 480px) { body { padding: 12px; } .card { padding: 16px; } .qr-modal-content { padding: 20px; } }
     </style>
 </head>
 <body>
     <div class="container" id="app">
-        <!-- ========== ЭКРАН АВТОРИЗАЦИИ ========== -->
+        <!-- ===== АВТОРИЗАЦИЯ ===== -->
         <div id="authScreen">
             <div class="logo">
                 <img src="https://i.ibb.co.com/ynzbM3k4/77.jpg" alt="ZR Kazakhstan Logo">
                 <span class="logo-text">KAZAKHSTAN</span>
                 <span class="logo-sub">Гарантия качества</span>
             </div>
-            <div class="card fade-in">
+            <div class="card">
                 <div class="card-title" id="authTitle">🔐 Авторизация</div>
                 <div id="authError" class="error hidden"></div>
                 <div id="authSuccess" class="success hidden"></div>
                 <input class="input" id="loginInput" placeholder="Логин (минимум 6 символов)" autocomplete="username">
-                <input class="input" id="passwordInput" placeholder="Пароль (заглавная, цифры, 8+ символов)" type="password" autocomplete="current-password">
+                <input class="input" id="passwordInput" placeholder="Пароль (заглавная, цифры, 8+ символов)" type="password">
                 <div id="confirmPasswordGroup" class="hidden">
                     <input class="input" id="confirmPasswordInput" placeholder="Подтвердите пароль" type="password">
                     <div class="phone-wrapper">
@@ -100,15 +97,13 @@
                         <input class="input input-phone" id="phoneInput" placeholder="7001234567" type="tel" maxlength="10">
                     </div>
                 </div>
-                <div class="forgot-link">
-                    <a id="forgotPasswordLink">Забыли пароль? Обратитесь к администратору</a>
-                </div>
+                <div class="forgot-link"><a id="forgotPasswordLink">Забыли пароль? Обратитесь к администратору</a></div>
                 <button class="btn" id="authBtn">Войти</button>
                 <div class="switch-link" id="switchAuthLink">Нет аккаунта? Зарегистрироваться</div>
             </div>
         </div>
 
-        <!-- ========== ЭКРАН ПОЛЬЗОВАТЕЛЯ ========== -->
+        <!-- ===== ПОЛЬЗОВАТЕЛЬ ===== -->
         <div id="userScreen" class="hidden">
             <div class="header">
                 <div>
@@ -130,7 +125,7 @@
             <div id="userRecords"></div>
         </div>
 
-        <!-- ========== QR-СКАНЕР ========== -->
+        <!-- ===== QR-СКАНЕР ===== -->
         <div id="scannerModal">
             <div id="qr-reader"></div>
             <div id="scannerResult">📷 Наведите камеру на QR-код</div>
@@ -138,7 +133,7 @@
             <div class="scanner-hint">Наведите камеру на QR-код рулона</div>
         </div>
 
-        <!-- ========== QR-ГЕНЕРАТОР ========== -->
+        <!-- ===== QR-ГЕНЕРАТОР ===== -->
         <div id="qrModal" class="qr-modal">
             <div class="qr-modal-content">
                 <h3 id="qrModalTitle">📱 QR-код рулона</h3>
@@ -152,9 +147,9 @@
             </div>
         </div>
 
-        <!-- ========== МОДАЛКА ЗАБЫЛИ ПАРОЛЬ ========== -->
+        <!-- ===== МОДАЛКА ЗАБЫЛИ ПАРОЛЬ ===== -->
         <div id="forgotModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); z-index:10000; justify-content:center; align-items:center;">
-            <div style="background:#fff; max-width:400px; width:90%; border-radius:20px; padding:24px; animation:fadeIn 0.3s ease-out;">
+            <div style="background:#fff; max-width:400px; width:90%; border-radius:20px; padding:24px;">
                 <div style="font-size:20px; font-weight:600; margin-bottom:16px;">🔑 Восстановление пароля</div>
                 <p style="color:#8888aa; margin-bottom:16px;">Введите ваш логин. Администратор увидит ваш запрос и поможет восстановить пароль.</p>
                 <input class="input" id="forgotLoginInput" placeholder="Ваш логин">
@@ -167,27 +162,26 @@
 
     <script>
         // ============================================
-        // === ПРАВИЛЬНАЯ КОНФИГУРАЦИЯ SUPABASE (только один раз) ===
+        // === КОНФИГУРАЦИЯ SUPABASE (ТОЛЬКО ОДИН РАЗ!) ===
         // ============================================
         const supabaseUrl = 'https://rbejdwshewypcnqidhdu.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiZWpkd3NoZXd5cGNucWlkaGR1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU3ODI4NTcsImV4cCI6MjEwMTM1ODg1N30.KpxxcTJYW8CRmi78XMhxYU-WGGc5J80DBTrUbWUmwps';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // ============================================
-        // ПОЛНЫЙ КОД ПРИЛОЖЕНИЯ
+        // КОД ПРИЛОЖЕНИЯ
         // ============================================
 
-        // ----- Состояние -----
         const state = {
             isLoggedIn: false,
             isAdmin: false,
             currentUser: '',
             users: {},
             films: [],
+            catalog: [],
             isRegister: false,
         };
 
-        // ----- DOM-элементы -----
         const $ = id => document.getElementById(id);
         const authScreen = $('authScreen');
         const userScreen = $('userScreen');
@@ -218,7 +212,6 @@
         const scanBtn = $('scanBtn');
         const scannerModal = $('scannerModal');
         const closeScannerBtn = $('closeScannerBtn');
-        const qrReader = $('qr-reader');
         const scannerResult = $('scannerResult');
         const qrModal = $('qrModal');
         const qrCodeContainer = $('qrCodeContainer');
@@ -254,11 +247,8 @@
                     .from('users')
                     .insert([{ login, password, phone, blocked: false }]);
                 if (error) {
-                    if (error.code === '23505') {
-                        showError(authError, '❌ Пользователь с таким логином уже существует');
-                    } else {
-                        showError(authError, '❌ Ошибка: ' + error.message);
-                    }
+                    if (error.code === '23505') showError(authError, '❌ Пользователь с таким логином уже существует');
+                    else showError(authError, '❌ Ошибка: ' + error.message);
                     return false;
                 }
                 return true;
@@ -280,17 +270,14 @@
                     showError(authError, '❌ Пользователь не найден');
                     return false;
                 }
-
                 if (data.blocked) {
                     showError(authError, '🚫 Аккаунт заблокирован');
                     return false;
                 }
-
                 if (data.password !== password) {
                     showError(authError, '❌ Неверный пароль');
                     return false;
                 }
-
                 return data;
             } catch (e) {
                 showError(authError, '❌ Ошибка: ' + e.message);
@@ -303,55 +290,27 @@
                 const { data, error } = await supabase.from('users').select('*');
                 if (error) return {};
                 const users = {};
-                data.forEach(u => {
-                    users[u.login] = {
-                        password: u.password,
-                        phone: u.phone,
-                        blocked: u.blocked || false
-                    };
-                });
+                data.forEach(u => { users[u.login] = { password: u.password, phone: u.phone, blocked: u.blocked || false }; });
                 return users;
-            } catch (e) {
-                console.error(e);
-                return {};
-            }
+            } catch (e) { console.error(e); return {}; }
         }
 
         async function loadUserFilms(username) {
             try {
-                const { data, error } = await supabase
-                    .from('films')
-                    .select('*')
-                    .eq('username', username);
+                const { data, error } = await supabase.from('films').select('*').eq('username', username);
                 if (error) return [];
                 return data;
-            } catch (e) {
-                console.error(e);
-                return [];
-            }
+            } catch (e) { console.error(e); return []; }
         }
 
         async function addFilm(roll, warranty, user, endDate) {
             try {
                 const { error } = await supabase
                     .from('films')
-                    .insert([{
-                        id: Date.now().toString(),
-                        roll,
-                        warranty,
-                        date: new Date().toLocaleString('ru-RU'),
-                        username: user,
-                        endDate
-                    }]);
-                if (error) {
-                    alert('❌ Ошибка: ' + error.message);
-                    return false;
-                }
+                    .insert([{ id: Date.now().toString(), roll, warranty, date: new Date().toLocaleString('ru-RU'), username: user, endDate }]);
+                if (error) { alert('❌ Ошибка: ' + error.message); return false; }
                 return true;
-            } catch (e) {
-                alert('❌ Ошибка: ' + e.message);
-                return false;
-            }
+            } catch (e) { alert('❌ Ошибка: ' + e.message); return false; }
         }
 
         async function loadCatalog() {
@@ -359,10 +318,7 @@
                 const { data, error } = await supabase.from('catalog').select('*');
                 if (error) return [];
                 return data;
-            } catch (e) {
-                console.error(e);
-                return [];
-            }
+            } catch (e) { console.error(e); return []; }
         }
 
         // ----- Показать экраны -----
@@ -393,25 +349,13 @@
 
             if (state.isRegister) {
                 const loginCheck = validateLogin(login);
-                if (!loginCheck.valid) {
-                    showError(authError, '❌ ' + loginCheck.msg);
-                    return;
-                }
+                if (!loginCheck.valid) { showError(authError, '❌ ' + loginCheck.msg); return; }
                 const passCheck = validatePassword(password);
-                if (!passCheck.valid) {
-                    showError(authError, '❌ ' + passCheck.msg);
-                    return;
-                }
+                if (!passCheck.valid) { showError(authError, '❌ ' + passCheck.msg); return; }
                 const phoneCheck = validatePhone(phone);
-                if (!phoneCheck.valid) {
-                    showError(authError, '❌ Телефон: ' + phoneCheck.msg);
-                    return;
-                }
+                if (!phoneCheck.valid) { showError(authError, '❌ Телефон: ' + phoneCheck.msg); return; }
                 const confirm = confirmPasswordInput.value.trim();
-                if (password !== confirm) {
-                    showError(authError, '❌ Пароли не совпадают');
-                    return;
-                }
+                if (password !== confirm) { showError(authError, '❌ Пароли не совпадают'); return; }
 
                 const success = await registerUser(login, password, phone);
                 if (success) {
@@ -421,7 +365,6 @@
                 return;
             }
 
-            // Вход
             if (login === 'admin' && password === 'admin123') {
                 state.isLoggedIn = true;
                 state.isAdmin = true;
@@ -435,8 +378,7 @@
                 state.isLoggedIn = true;
                 state.isAdmin = false;
                 state.currentUser = login;
-                const films = await loadUserFilms(login);
-                state.films = films;
+                state.films = await loadUserFilms(login);
                 showUserScreen();
             }
         }
@@ -464,13 +406,7 @@
         function handleForgotPassword() {
             const login = forgotLoginInput.value.trim();
             forgotError.classList.add('hidden');
-
-            if (!login) {
-                showError(forgotError, '❌ Введите логин');
-                return;
-            }
-
-            // В демо-режиме просто показываем сообщение
+            if (!login) { showError(forgotError, '❌ Введите логин'); return; }
             alert('📧 Запрос на восстановление пароля отправлен администратору.\nАдминистратор свяжется с вами.');
             forgotModal.style.display = 'none';
         }
@@ -483,50 +419,27 @@
             scannerModal.classList.add('active');
 
             try {
-                if (typeof Html5Qrcode === 'undefined') {
-                    throw new Error('Библиотека сканера не загружена');
-                }
+                if (typeof Html5Qrcode === 'undefined') throw new Error('Библиотека сканера не загружена');
                 html5QrCode = new Html5Qrcode("qr-reader");
-
-                const config = {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 },
-                    formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE]
-                };
-
-                await html5QrCode.start({ facingMode: "environment" },
-                    config,
+                const config = { fps: 10, qrbox: { width: 250, height: 250 }, formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE] };
+                await html5QrCode.start({ facingMode: "environment" }, config,
                     function(decodedText) {
                         scannerResult.textContent = '✅ Найден код: ' + decodedText;
-                        if (rollInput) {
-                            rollInput.value = decodedText;
-                            rollInput.dispatchEvent(new Event('input'));
-                        }
-                        setTimeout(() => {
-                            stopScanner();
-                            alert('✅ Рулон отсканирован: ' + decodedText);
-                        }, 500);
+                        if (rollInput) { rollInput.value = decodedText; rollInput.dispatchEvent(new Event('input')); }
+                        setTimeout(() => { stopScanner(); alert('✅ Рулон отсканирован: ' + decodedText); }, 500);
                     },
                     function(errorMessage) {}
                 );
-
                 scannerResult.textContent = '📷 Камера готова. Наведите на QR-код.';
             } catch (err) {
                 scannerResult.textContent = '❌ Ошибка: ' + err.message;
-                setTimeout(() => {
-                    scannerModal.classList.remove('active');
-                }, 3000);
+                setTimeout(() => { scannerModal.classList.remove('active'); }, 3000);
             }
         }
 
         function stopScanner() {
             if (html5QrCode) {
-                try {
-                    html5QrCode.stop().then(() => {
-                        html5QrCode.clear();
-                        html5QrCode = null;
-                    }).catch(err => {});
-                } catch (e) {}
+                try { html5QrCode.stop().then(() => { html5QrCode.clear(); html5QrCode = null; }).catch(err => {}); } catch (e) {}
             }
             scannerModal.classList.remove('active');
             scannerResult.textContent = '📷 Наведите камеру на QR-код';
@@ -535,39 +448,23 @@
         // ----- QR-генератор -----
         function showQrModal(roll) {
             const catalogItem = state.catalog.find(c => c.roll === roll);
-            if (!catalogItem) {
-                alert('❌ Рулон не найден');
-                return;
-            }
-
+            if (!catalogItem) { alert('❌ Рулон не найден'); return; }
             qrModalTitle.textContent = '📱 QR-код: ' + roll;
             qrRollNumber.textContent = roll;
-
             qrCodeContainer.innerHTML = '';
             try {
                 if (typeof QRCode !== 'undefined') {
-                    new QRCode(qrCodeContainer, {
-                        text: roll,
-                        width: 200,
-                        height: 200,
-                        colorDark: '#000000',
-                        colorLight: '#ffffff',
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
+                    new QRCode(qrCodeContainer, { text: roll, width: 200, height: 200, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
                 } else {
                     qrCodeContainer.innerHTML = '<div style="padding:20px; border:2px dashed #c9a84c; border-radius:12px; font-size:16px; color:#8888aa;">QR-код: ' + roll + '</div>';
                 }
             } catch (e) {
                 qrCodeContainer.innerHTML = '<div style="padding:20px; border:2px dashed #c9a84c; border-radius:12px; font-size:16px; color:#8888aa;">QR-код: ' + roll + '</div>';
             }
-
             qrModal.classList.add('active');
         }
 
-        function closeQrModal() {
-            qrModal.classList.remove('active');
-            qrCodeContainer.innerHTML = '';
-        }
+        function closeQrModal() { qrModal.classList.remove('active'); qrCodeContainer.innerHTML = ''; }
 
         function downloadQr() {
             const canvas = qrCodeContainer.querySelector('canvas');
@@ -576,9 +473,7 @@
                 link.download = 'qr-' + qrRollNumber.textContent + '.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-            } else {
-                alert('❌ Сначала сгенерируйте QR-код');
-            }
+            } else { alert('❌ Сначала сгенерируйте QR-код'); }
         }
 
         // ----- Пользователь -----
@@ -587,36 +482,17 @@
             const warranty = warrantyInput.value.trim();
             userError.classList.add('hidden');
 
-            if (!roll || !warranty) {
-                showError(userError, '❌ Заполните все поля');
-                return;
-            }
+            if (!roll || !warranty) { showError(userError, '❌ Заполните все поля'); return; }
 
-            // Проверяем в каталоге
             const catalogItem = state.catalog.find(c => c.roll === roll);
-            if (!catalogItem) {
-                showError(userError, '❌ Рулон не найден в системе ZR Kazakhstan');
-                return;
-            }
+            if (!catalogItem) { showError(userError, '❌ Рулон не найден в системе ZR Kazakhstan'); return; }
 
-            // Проверяем дубли
             const existing = state.films.find(f => f.roll === roll && f.username === state.currentUser);
-            if (existing) {
-                showError(userError, '❌ Этот рулон уже добавлен в ваш архив');
-                return;
-            }
+            if (existing) { showError(userError, '❌ Этот рулон уже добавлен в ваш архив'); return; }
 
             const success = await addFilm(roll, warranty, state.currentUser, catalogItem.endDate);
             if (success) {
-                const newRecord = {
-                    id: Date.now().toString(),
-                    roll,
-                    warranty,
-                    date: new Date().toLocaleString('ru-RU'),
-                    username: state.currentUser,
-                    endDate: catalogItem.endDate,
-                };
-                state.films = [newRecord, ...state.films];
+                state.films = [{ id: Date.now().toString(), roll, warranty, date: new Date().toLocaleString('ru-RU'), username: state.currentUser, endDate: catalogItem.endDate }, ...state.films];
                 rollInput.value = '';
                 warrantyInput.value = '';
                 renderUserRecords();
@@ -627,12 +503,10 @@
         function renderUserRecords() {
             const userFilms = state.films.filter(f => f.username === state.currentUser);
             userCount.textContent = userFilms.length;
-
             if (userFilms.length === 0) {
                 userRecords.innerHTML = '<div style="color:#8888aa; text-align:center; margin-top:20px;">Нет добавленных плёнок</div>';
                 return;
             }
-
             userRecords.innerHTML = userFilms.map(item => `
                 <div class="record">
                     <div class="record-roll">🎯 ${item.roll}</div>
@@ -653,23 +527,15 @@
         }
 
         // ----- Утилиты -----
-        function showError(el, msg) {
-            el.textContent = msg;
-            el.classList.remove('hidden');
-        }
+        function showError(el, msg) { el.textContent = msg; el.classList.remove('hidden'); }
 
-        function showSuccess(el, msg) {
-            el.textContent = msg;
-            el.classList.remove('hidden');
-        }
+        function showSuccess(el, msg) { el.textContent = msg; el.classList.remove('hidden'); }
 
         // ----- Инициализация -----
         async function init() {
-            // Загружаем каталог и пользователей
             state.catalog = await loadCatalog();
             state.users = await loadUsers();
 
-            // Авторизация
             authBtn.addEventListener('click', handleAuth);
             switchAuthLink.addEventListener('click', toggleAuthMode);
             loginInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
@@ -681,17 +547,14 @@
             forgotSubmitBtn.addEventListener('click', handleForgotPassword);
             forgotLoginInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleForgotPassword(); });
 
-            // Пользователь
             addRecordBtn.addEventListener('click', handleAddRecord);
             userLogoutBtn.addEventListener('click', logout);
             scanBtn.addEventListener('click', startScanner);
             closeScannerBtn.addEventListener('click', stopScanner);
 
-            // QR-генератор
             closeQrBtn.addEventListener('click', closeQrModal);
             downloadQrBtn.addEventListener('click', downloadQr);
 
-            // Экспорт функций для HTML
             window.showQrModal = showQrModal;
 
             showAuthScreen();
